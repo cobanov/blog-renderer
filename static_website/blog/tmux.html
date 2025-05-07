@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+  <head>
+    <script>
+      // Immediately set theme before anything else
+      document.documentElement.className =
+        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Türkçe tmux rehberi</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <a href="/" id="head-link">cobanov</a>
+      <nav class="main-nav">
+        <a href="/blog/" class="nav-link">Blog</a>
+        <a href="/projects/" class="nav-link">Projects</a>
+      </nav>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="social-icons">
+          <a
+            href="https://github.com/cobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <i class="fab fa-github"></i>
+          </a>
+          <a
+            href="https://twitter.com/mertcobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+          >
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="post-date">2025-05-07</div>
+      <h1>Türkçe tmux rehberi</h1>
+
+<p><strong>tmux</strong> bir terminal çoklayıcısıdır ve özellikle uzun süren veya çoklu terminal oturumlarını yönetirken kullanırız. Bu araç, kullanıcıların birden fazla terminal oturumunu tek bir arayüzde yönetmelerine olanak tanır.</p>
+
+<p>Özellikle birden çok göreve aynı anda odaklanmanız gerektiğinde, iş akışınızı büyük ölçüde kolaylaştırmaya yarar.</p>
+
+<p>Önemli bir özelliği, tmux oturumlarının bağlantı kesilse bile korunmasıdır. Yani, bir sunucuyla uzaktan çalışırken bağlantınız kesilirse, tmux oturumunuz arka planda çalışmaya devam eder ve bağlantıyı yeniden kurduğunuzda kaldığınız yerden devam edebilirsiniz. Bu, özellikle kararsız internet bağlantıları olan veya uzun süreli komutlar çalıştırdığımızda oldukça işe yarıyor.</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/4000/0*YM1kUsmkKiF1zvPb.png" alt="tmux ekranı" /></p>
+
+<h2>tmux’a neden ihtiyacım olur?</h2>
+
+<p>tmux, özellikle uzak oturumları yönetirken veya bir terminal ortamında birden fazla görevde gitgel yaparken, komut satırı işleriniz için güçlü, esnek ve dayanıklı bir kontrol merkezi gibi çalışır.</p>
+
+<ul>
+<li><strong>Çoklu Pencereler:</strong> tmux, tek bir terminal penceresi içinde birden çok pencere açmanıza olanak tanır. Bu, lokal makinenizde olduğu gibi birden fazla terminal sekmesi açamayacağınız bir uzak sunucuda çalışırken özellikle faydalıdır.</li>
+<li><strong>Sessions and Detaching:</strong> Bir tmux oturumundan ayrılabilir ve onu arka planda çalışır durumda bırakabilirsiniz. Bu, bir tmux oturumu içinde uzun süreli bir işlem başlatabilir, ondan ayrılabilir ve sonra, farklı bir bilgisayardan bile, daha sonra yeniden bağlanabilirsiniz. Bu, uzun süren görevler için uzak sunucularda kapanmayan bir oturum gibi değerlidir.</li>
+<li><strong>Persistent Sessions:</strong> Bir sunucudan bağlantınız kesilirse (SSH bağlantısını kaybetmek gibi), tmux oturumunuzu aktif tutar. Tekrardan bağlanabilir ve hiçbir şey kaybetmeden kaldığınız yerden devam edebilirsiniz.</li>
+<li><strong>Split Panes:</strong> tmux, terminal pencerenizi yatay ve dikey olarak birden fazla panele bölmektedir. Bu, birkaç komutun çıktısını aynı anda görebilmeniz, izleme, düzenleme veya birden fazla komut satırı uygulamasını yan yana çalıştırmanız için harikadır.</li>
+</ul>
+
+<h2>tmux kurulumu</h2>
+
+<p>_Source: <a href="https://github.com/tmux/tmux/wiki/Installing">https://github.com/tmux/tmux/wiki/Installing</a>_</p>
+
+<pre><code>╔════════════════════════╦═════════════════════╗
+║        Platform        ║   Install Command   ║
+╠════════════════════════╬═════════════════════╣
+║ Arch Linux             ║ pacman -S tmux      ║
+║ Debian or Ubuntu       ║ apt install tmux    ║
+║ Fedora                 ║ dnf install tmux    ║
+║ RHEL or CentOS         ║ yum install tmux    ║
+║ macOS (using Homebrew) ║ brew install tmux   ║
+║ macOS (using MacPorts) ║ port install tmux   ║
+║ openSUSE               ║ zypper install tmux ║
+╚════════════════════════╩═════════════════════╝
+</code></pre>
+
+<h2>tmux’a başlarken</h2>
+
+<p>tmux kullanmaya başlamak için terminalinizde tmux yazın. Bu komut, bir tmux sunucusu başlatır ve varsayılan bir oturum oluşturur (number 0)</p>
+
+<pre><code>tmux
+</code></pre>
+
+<p><img src="https://cdn-images-1.medium.com/max/3176/0*nPkiznvGZTispU-K.png" alt="" /></p>
+
+<p>Bir tmux oturumundan ayrılmak için ctrl+b ardından d (detach) tuşlarına basın. Tmux, “prefix” kombinasyonuna basılarak tetiklenen bir dizi tuş keybindingleri (klavye kısayolları) kullanır. Varsayılan olarak, prefix Ctrl+B dir. Daha sonra, mevcut oturumdan ayrılmak için D (detach) tuşuna basın.</p>
+
+<pre><code>~ tmux ls # 0: 1 windows (created Thu Nov 30 20:16:45 2023)
+</code></pre>
+
+<p><img src="https://cdn-images-1.medium.com/max/3176/0*jNjXSqK4_R2JJ7uR.png" alt="" /></p>
+
+<p>Aşağıdaki komut ile birlikte hali hazırda açmış olduğunuz bir session’ı yeniden adlandırabilirsiniz.</p>
+
+<pre><code># tmux rename -t &lt;target_session&gt; &lt;new_name&gt;
+~ tmux rename -t 0 cobanov
+</code></pre>
+
+<p>Bu noktada SSH bağlantınızı kesebilirsiniz yine de komut çalışmaya devam edecektir. İstediğinize mevcut tmux oturumuna yeniden bağlanarak kaldığınız yerden devam edebilirsiniz:</p>
+
+<pre><code># tmux a -t &lt;session_name&gt;
+~ tmux attach -t cobanov
+</code></pre>
+
+<p>AYCS, her sey oldugu yerinde devam ediyor.</p>
+
+<h2>Ekranların Yönetimi</h2>
+
+<p>Bir masaüstü ortamında nasıl pencereleriniz varsa Tmux’ta panelleriniz vardır. Aynı pencereler gibi, bu paneller de birden fazla uygulamayla etkileşimde bulunmanızı sağlar ve benzer şekilde açılabilir, kapatılabilir, yeniden boyutlandırılabilir ve taşınabilir.</p>
+
+<p>Standart bir masaüstün ortamından farklı olarak, bu paneller tüm terminale döşenmiştir ve çoğunlukla tmux kısayolları ile yönetilir. _(fare işlevselliği eklenebilir olsa da)._ Yeni bir panel oluşturmak için ekranı yatay veya dikey olarak bölersiniz.</p>
+
+<h2>Dikey Ekran Bölme</h2>
+
+<pre><code>ctrl+b %
+</code></pre>
+
+<p><img src="https://cdn-images-1.medium.com/max/3176/0*bq_d58tUTA54L-1v.png" alt="" /></p>
+
+<h2>Yatay Ekran Bölme</h2>
+
+<pre><code>ctrl+b "
+</code></pre>
+
+<p><img src="https://cdn-images-1.medium.com/max/3176/0*0vmRK4OB6FIUNT2M.png" alt="" /></p>
+
+<h2>Ekranlar arası geçiş</h2>
+
+<pre><code>ctrl+b [arrow key]
+</code></pre>
+
+<p>tmux’ta tüm kısayol tuşlarını görmek için basitçe bind-key ? komutunu kullanın, benim durumumda bu CTRL-B ? olacaktır.</p>
+
+<h2>Further Reading &amp; Sources</h2>
+
+<ol>
+<li><a href="https://github.com/tmux/tmux">https://github.com/tmux/tmux</a></li>
+<li><a href="https://gist.github.com/MohamedAlaa/2961058">https://gist.github.com/MohamedAlaa/2961058</a></li>
+<li><a href="https://leanpub.com/the-tao-of-tmux/read">https://leanpub.com/the-tao-of-tmux/read</a></li>
+<li><a href="https://medium.com/pragmatic-programmers/a-beginners-guide-to-tmux-7e6daa5c0154">https://medium.com/pragmatic-programmers/a-beginners-guide-to-tmux-7e6daa5c0154</a></li>
+</ol>
+
+    </main>
+    <footer>
+      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>
