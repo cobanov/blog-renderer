@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+  <head>
+    <script>
+      // Immediately set theme before anything else
+      document.documentElement.className =
+        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Search Engine 🔍</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <a href="/" id="head-link">cobanov</a>
+      <nav class="main-nav">
+        <a href="/blog/" class="nav-link">Blog</a>
+        <a href="/projects/" class="nav-link">Projects</a>
+      </nav>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="social-icons">
+          <a
+            href="https://github.com/cobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <i class="fab fa-github"></i>
+          </a>
+          <a
+            href="https://twitter.com/mertcobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+          >
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="post-date">2025-05-07</div>
+      <h1>Image Search Engine 🔍</h1>
+
+<p>A powerful and efficient image search engine that uses deep learning to find similar images based on their visual content. This project combines state-of-the-art neural networks with vector database technology to enable fast and accurate image similarity search.</p>
+
+<p><img src="assets/demo.png" alt="assets/demo.png" /></p>
+
+<h2>Features</h2>
+
+<ul>
+<li><strong>Multiple Model Support</strong>: Compatible with various deep learning architectures:
+<ul>
+<li>ResNet50</li>
+<li>EfficientNet</li>
+<li>MobileNetV3</li>
+</ul></li>
+<li><strong>Vector Database Integration</strong>: Uses LanceDB for efficient similarity search</li>
+<li><strong>Batch Processing</strong>: Optimized for processing large image datasets</li>
+<li><strong>Web Interface</strong>: User-friendly FastAPI-based web application</li>
+<li><strong>Configurable</strong>: Easy-to-modify YAML configuration files</li>
+<li><strong>Multi-format Support</strong>: Handles various image formats (JPEG, PNG, WebP)</li>
+</ul>
+
+<h2>Installation</h2>
+
+<ol>
+<li>Clone the repository:</li>
+</ol>
+
+<div class="codehilite">
+<pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/yourusername/image-search-engine.git
+<span class="nb">cd</span><span class="w"> </span>image-search-engine
+</code></pre>
+</div>
+
+<ol start="2">
+<li>Create a virtual environment (recommended):</li>
+</ol>
+
+<div class="codehilite">
+<pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+<span class="nb">source</span><span class="w"> </span>venv/bin/activate<span class="w">  </span><span class="c1"># On Windows: venv\Scripts\activate</span>
+</code></pre>
+</div>
+
+<ol start="3">
+<li>Install dependencies:</li>
+</ol>
+
+<div class="codehilite">
+<pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</code></pre>
+</div>
+
+<h2>Usage</h2>
+
+<h3>1. Image Ingestion</h3>
+
+<p>To index your image dataset:</p>
+
+<div class="codehilite">
+<pre><span></span><code>python<span class="w"> </span>ingest.py
+</code></pre>
+</div>
+
+<p>This will:</p>
+
+<ul>
+<li>Scan your dataset directory for images</li>
+<li>Extract features using the specified model</li>
+<li>Store embeddings in the vector database</li>
+</ul>
+
+<h3>2. Query Images</h3>
+
+<p>To search for similar images:</p>
+
+<div class="codehilite">
+<pre><span></span><code>python<span class="w"> </span>query_db.py<span class="w"> </span>--image_path<span class="w"> </span>path/to/your/query/image.jpg
+</code></pre>
+</div>
+
+<h3>3. Web Interface</h3>
+
+<p>Start the web application:</p>
+
+<div class="codehilite">
+<pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>uvicorn<span class="w"> </span>app.app:app<span class="w"> </span>--reload
+</code></pre>
+</div>
+
+<p>Access the web interface at <code>http://localhost:8000</code></p>
+
+<h2>🔧 Configuration</h2>
+
+<p>Configuration files are stored in the <code>configs/</code> directory. Available configurations:</p>
+
+<ul>
+<li><code>animals_efficientnet.yml</code></li>
+<li><code>animals_mobilenetv3.yml</code></li>
+<li><code>animals_resnet50.yml</code></li>
+<li><code>ocean_resnet50.yml</code></li>
+<li><code>ocean_resnet50_v2.yml</code></li>
+</ul>
+
+<p>Example configuration:</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="nt">MODEL_NAME</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resnet50</span>
+<span class="nt">MODEL_DIM</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2048</span>
+<span class="nt">COLLECTION_NAME</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">images</span>
+<span class="nt">DATASET_PATH</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./dataset</span>
+<span class="nt">LANCEDB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./vectordb</span>
+</code></pre>
+</div>
+
+<h2>Project Structure</h2>
+
+<pre><code>image-search-engine/
+├── app/                    # Web application
+├── configs/                # Model configurations
+├── dataset/               # Image dataset directory
+├── engine/                # Core search engine components
+├── vectordb/              # Vector database storage
+├── ingest.py              # Dataset ingestion script
+├── query_db.py            # Image query script
+└── requirements.txt       # Project dependencies
+</code></pre>
+
+<h2>How It Works</h2>
+
+<ol>
+<li><strong>Feature Extraction</strong>: Deep learning models convert images into high-dimensional feature vectors</li>
+<li><strong>Vector Storage</strong>: Features are normalized and stored in LanceDB</li>
+<li><strong>Similarity Search</strong>: Query images are processed the same way and compared using cosine similarity</li>
+<li><strong>Result Ranking</strong>: Most similar images are returned based on vector similarity</li>
+</ol>
+
+<h2>Contributing</h2>
+
+<p>Contributions are welcome! Please feel free to submit a Pull Request.</p>
+
+<h2>License</h2>
+
+<p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
+
+    </main>
+    <footer>
+      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+  <head>
+    <script>
+      // Immediately set theme before anything else
+      document.documentElement.className =
+        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tasnif</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <a href="/" id="head-link">cobanov</a>
+      <nav class="main-nav">
+        <a href="/blog/" class="nav-link">Blog</a>
+        <a href="/projects/" class="nav-link">Projects</a>
+      </nav>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="social-icons">
+          <a
+            href="https://github.com/cobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <i class="fab fa-github"></i>
+          </a>
+          <a
+            href="https://twitter.com/mertcobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+          >
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="post-date">2025-05-07</div>
+      <h1>Tasnif</h1>
+
+<p><img src="https://github.com/cobanov/tasnif/blob/main/assets/asdd.png?raw=true" alt="tasnif" /></p>
+
+<p>Tasnif is a Python package designed for clustering images into user-defined classes based on their visual content. It utilizes deep learning to generate image embeddings, Principal Component Analysis (PCA) for dimensionality reduction, and K-means for clustering. Tasnif supports processing on both GPU and CPU, making it versatile for different computational environments.</p>
+
+<h2>Features</h2>
+
+<ul>
+<li>Generate embeddings for images using a pre-trained model.</li>
+<li>Dimensionality reduction using PCA to enhance clustering performance.</li>
+<li>Clustering of images into user-specified classes with K-means.</li>
+<li>Visualization support by creating image grids for each cluster.</li>
+<li>Efficient image reading and preprocessing utilities.</li>
+</ul>
+
+<h2>Installation</h2>
+
+<p>To install Tasnif, you need Python 3.6 or later. Clone this repository to your local machine and install the required dependencies:</p>
+
+<div class="codehilite">
+<pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>tasnif
+</code></pre>
+</div>
+
+<h2>Usage</h2>
+
+<p>Import <code>Tasnif</code> and initialize it with the desired number of classes, PCA dimensions, and whether to use GPU:</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tasnif</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tasnif</span>
+
+<span class="c1"># Initialize Tasnif with 5 classes, PCA dimensions set to 16, and GPU usage</span>
+<span class="n">classifier</span> <span class="o">=</span> <span class="n">Tasnif</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">pca_dim</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Read the images from a directory, calculate the embeddings, PCA, and perform K-means clustering:</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Read images from a specified directory</span>
+<span class="n">classifier</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;path/to/your/images&#39;</span><span class="p">)</span>
+
+<span class="c1"># Calculate embeddings, PCA, and perform clustering</span>
+<span class="n">classifier</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>Finally, export the clustered images and visualization grids to a specified directory:</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Export clustered images and grids</span>
+<span class="n">classifier</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;path/to/output&#39;</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2>To-Do</h2>
+
+<ul>
+<li>[x] Prevent calculation if there is no image read (PCA &amp; k-means)</li>
+<li>[x] Export embeddings</li>
+<li>[ ] Make model independent from img2vec</li>
+<li>[ ] Separate cpu and gpu installation and catch gpu errors</li>
+<li>[ ] Argument parser</li>
+</ul>
+
+<h2>Contributing</h2>
+
+<p>Contributions to <code>Tasnif</code> are welcome! Please fork the repository and submit a pull request with your proposed changes.</p>
+
+<h2>Contributors</h2>
+
+<a href="https://github.com/cobanov/tasnif/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=cobanov/tasnif" />
+</a>
+
+<h2>License</h2>
+
+<p>Tasnif is released under the MIT License. See the <a href="LICENSE">LICENSE</a> file for more details.</p>
+
+    </main>
+    <footer>
+      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>

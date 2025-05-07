@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+  <head>
+    <script>
+      // Immediately set theme before anything else
+      document.documentElement.className =
+        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Captioning</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <a href="/" id="head-link">cobanov</a>
+      <nav class="main-nav">
+        <a href="/blog/" class="nav-link">Blog</a>
+        <a href="/projects/" class="nav-link">Projects</a>
+      </nav>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="social-icons">
+          <a
+            href="https://github.com/cobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <i class="fab fa-github"></i>
+          </a>
+          <a
+            href="https://twitter.com/mertcobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+          >
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="post-date">2025-05-07</div>
+      <h1>Image Captioning</h1>
+
+<p>Captioning is an img2txt model that uses the BLIP. Exports captions of images.</p>
+
+<h2>Checkpoints [Required]</h2>
+
+<p>If there is no 'Checkpoints' folder, the script will automatically create the folder and download the model file, you can do this manually if you want.</p>
+
+<p>Download the fine-tuned checkpoint and copy into 'checkpoints' folder (create if does not exists)</p>
+
+<ul>
+<li><a href="https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_large_caption.pth">BLIP-Large</a></li>
+</ul>
+
+<h2>Demo</h2>
+
+<p><img src='./demo.jpg' width=500px></p>
+
+<pre><code>datasets\0.jpg, a piece of cheese with figs and a piece of cheese
+datasets\1002.jpg, a close up of a yellow flower with a green background
+datasets\1005.jpg, a planter filled with lots of colorful flowers
+datasets\1008.jpg, a teacher standing in front of a classroom full of children
+datasets\1011.jpg, a tortoise on a white background with a white background
+datasets\1014.jpg, a glass of wine sitting on top of a table
+datasets\1017.jpg, a close up of a plant with pink flowers
+datasets\102.jpg, a platter of different types of sushi
+datasets\1020.jpg, a frog sitting on top of a bamboo stick
+datasets\1023.jpg, a revolver on a white background
+datasets\1026.jpg, a woman holding a small white dog in her arms
+datasets\1029.jpg, a woman in a business suit standing in front of a building
+datasets\1032.jpg, sliced cucumber on a white background
+datasets\1035.jpg, a woman in glasses and a pair of boxing gloves
+datasets\1038.jpg, a pile of sliced potatoes on a white surface
+datasets\1041.jpg, two glasses of orange juice on a wooden table
+datasets\1044.jpg, a woman sitting on the floor in front of a door
+
+</code></pre>
+
+<h2>Usage</h2>
+
+<div class="codehilite">
+<pre><span></span><code>usage:<span class="w"> </span>inference.py<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-i<span class="w"> </span>INPUT<span class="o">]</span><span class="w"> </span><span class="o">[</span>-b<span class="w"> </span>BATCH<span class="o">]</span><span class="w"> </span><span class="o">[</span>-p<span class="w"> </span>PATHS<span class="o">]</span><span class="w"> </span><span class="o">[</span>-g<span class="w"> </span>GPU_ID<span class="o">]</span>
+
+Image<span class="w"> </span>caption<span class="w"> </span>CLI
+
+optional<span class="w"> </span>arguments:
+<span class="w">  </span>-h,<span class="w"> </span>--help<span class="w">                      </span>show<span class="w"> </span>this<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span>
+<span class="w">  </span>-i<span class="w"> </span>INPUT,<span class="w">  </span>--input<span class="w"> </span>INPUT<span class="w">        </span>Input<span class="w"> </span>directoryt<span class="w"> </span>path,<span class="w"> </span>such<span class="w"> </span>as<span class="w"> </span>./images
+<span class="w">  </span>-b<span class="w"> </span>BATCH,<span class="w">  </span>--batch<span class="w"> </span>BATCH<span class="w">        </span>Batch<span class="w"> </span>size
+<span class="w">  </span>-p<span class="w"> </span>PATHS,<span class="w">  </span>--paths<span class="w"> </span>PATHS<span class="w">        </span>A<span class="w"> </span>any.txt<span class="w"> </span>files<span class="w"> </span>contains<span class="w"> </span>all<span class="w"> </span>image<span class="w"> </span>paths.
+<span class="w">  </span>-g<span class="w"> </span>GPU_ID,<span class="w"> </span>--gpu-id<span class="w"> </span>GPU_ID<span class="w">      </span>gpu<span class="w"> </span>device<span class="w"> </span>to<span class="w"> </span>use<span class="w"> </span><span class="o">(</span><span class="nv">default</span><span class="o">=</span><span class="m">0</span><span class="o">)</span><span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span><span class="m">0</span>,1,2<span class="w"> </span><span class="k">for</span><span class="w"> </span>multi-gpu
+</code></pre>
+</div>
+
+<h3>Example</h3>
+
+<div class="codehilite">
+<pre><span></span><code>python<span class="w"> </span>inference.py<span class="w"> </span>-i<span class="w"> </span>/path/images/folder<span class="w"> </span>--batch<span class="w"> </span><span class="m">8</span><span class="w"> </span>--gpu<span class="w"> </span><span class="m">0</span>
+</code></pre>
+</div>
+
+<h2>Contributing</h2>
+
+<p>Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.</p>
+
+<p>Please make sure to update tests as appropriate.</p>
+
+<h2>License</h2>
+
+<p><a href="https://choosealicense.com/licenses/mit/">MIT</a></p>
+
+    </main>
+    <footer>
+      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>

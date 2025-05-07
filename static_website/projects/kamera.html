@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+  <head>
+    <script>
+      // Immediately set theme before anything else
+      document.documentElement.className =
+        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kamera</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <a href="/" id="head-link">cobanov</a>
+      <nav class="main-nav">
+        <a href="/blog/" class="nav-link">Blog</a>
+        <a href="/projects/" class="nav-link">Projects</a>
+      </nav>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="social-icons">
+          <a
+            href="https://github.com/cobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <i class="fab fa-github"></i>
+          </a>
+          <a
+            href="https://twitter.com/mertcobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+          >
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="post-date">2025-05-07</div>
+      <h1>Kamera</h1>
+
+<p><strong>Kamera</strong> makes real-time webcam streaming effortless. The only thing you need to know is:</p>
+
+<div class="codehilite">
+<pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>kamera
+</code></pre>
+</div>
+
+<div class="codehilite">
+<pre><span></span><code>kamera
+</code></pre>
+</div>
+
+<p>And voilà! Your webcam is live and streaming at <code>http://localhost:4141</code>. No setup headaches, just instant results.</p>
+
+<h2>Demo</h2>
+
+<p><img src="https://github.com/cobanov/kamera/raw/main/assets/example.png" alt="dog" /></p>
+
+<h2>Features</h2>
+
+<ul>
+<li>Stream live video from your webcam directly to a web interface.</li>
+<li>Adjust settings dynamically, including:
+<ul>
+<li>Brightness</li>
+<li>Rotation</li>
+<li>Grayscale</li>
+<li>Mirroring</li>
+<li>Filters (e.g., Sepia, Blur, Edge Detection)</li>
+</ul></li>
+<li>Easy-to-use API built with FastAPI.</li>
+<li>Real-time video processing using OpenCV.</li>
+</ul>
+
+<h2>API Endpoints</h2>
+
+<ul>
+<li><strong>GET /video_feed</strong>: Stream the live video feed.</li>
+<li><strong>POST /settings</strong>: Update video processing settings dynamically.</li>
+</ul>
+
+<h3>Settings Example</h3>
+
+<p>Use the <code>/settings</code> endpoint to update the following parameters:</p>
+
+<ul>
+<li><code>rotate</code>: Rotation angle (0, 90, 180, 270).</li>
+<li><code>brightness</code>: Adjust the frame brightness (default: 1.0).</li>
+<li><code>grayscale</code>: Toggle grayscale mode (default: False).</li>
+<li><code>mirror</code>: Mirror the video feed (default: False).</li>
+<li><code>filter_name</code>: Apply a filter (<code>none</code>, <code>sepia</code>, <code>blur</code>, <code>edges</code>).</li>
+</ul>
+
+<p>Example request (using <code>curl</code>):</p>
+
+<div class="codehilite">
+<pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:4141/settings<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s2">&quot;rotate=90&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s2">&quot;brightness=1.5&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s2">&quot;grayscale=true&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s2">&quot;filter_name=sepia&quot;</span>
+</code></pre>
+</div>
+
+<h2>License</h2>
+
+<p>This project is licensed under the MIT License.</p>
+
+<hr />
+
+<p>Crafted with ❤️ by Mert Cobanov</p>
+
+    </main>
+    <footer>
+      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>

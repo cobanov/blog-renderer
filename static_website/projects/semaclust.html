@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+  <head>
+    <script>
+      // Immediately set theme before anything else
+      document.documentElement.className =
+        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>semaclust</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <a href="/" id="head-link">cobanov</a>
+      <nav class="main-nav">
+        <a href="/blog/" class="nav-link">Blog</a>
+        <a href="/projects/" class="nav-link">Projects</a>
+      </nav>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="social-icons">
+          <a
+            href="https://github.com/cobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <i class="fab fa-github"></i>
+          </a>
+          <a
+            href="https://twitter.com/mertcobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+          >
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="post-date">2025-05-07</div>
+      <h1>semaclust</h1>
+
+<p><strong>semaclust</strong> (semantic + clustering) is a lightweight Python package for semantic text clustering using sentence embeddings and agglomerative clustering.</p>
+
+<h2>Features</h2>
+
+<ul>
+<li>SentenceTransformer-based text encoding</li>
+<li>Agglomerative clustering with configurable thresholds</li>
+<li>Easily map or replace similar text values</li>
+</ul>
+
+<h2>Installation</h2>
+
+<div class="codehilite">
+<pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/cobanov/semaclust.git
+</code></pre>
+</div>
+
+<h2>Usage</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Create clusterer</span>
+<span class="n">clusterer</span> <span class="o">=</span> <span class="n">TextClusterer</span><span class="p">()</span>
+
+<span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;New York&quot;</span><span class="p">,</span> <span class="s2">&quot;Los Angeles&quot;</span><span class="p">,</span> <span class="s2">&quot;San Francisco&quot;</span><span class="p">,</span> <span class="s2">&quot;new york city&quot;</span><span class="p">,</span> <span class="s2">&quot;LA&quot;</span><span class="p">,</span> <span class="s2">&quot;San Fran&quot;</span><span class="p">]</span>
+</code></pre>
+</div>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Get clusters</span>
+<span class="n">clusters</span> <span class="o">=</span> <span class="n">clusterer</span><span class="o">.</span><span class="n">cluster</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Clusters:&quot;</span><span class="p">,</span> <span class="n">clusters</span><span class="p">)</span>
+
+<span class="c1"># Clusters: {1: [&#39;New York&#39;, &#39;new york city&#39;], 2: [&#39;Los Angeles&#39;, &#39;LA&#39;], 0: [&#39;San Francisco&#39;, &#39;San Fran&#39;]}</span>
+</code></pre>
+</div>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Get replacement map</span>
+<span class="n">replacement_map</span> <span class="o">=</span> <span class="n">clusterer</span><span class="o">.</span><span class="n">get_replacement_map</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Replacement map:&quot;</span><span class="p">,</span> <span class="n">replacement_map</span><span class="p">)</span>
+
+<span class="c1"># Replacement map: {&#39;New York&#39;: &#39;New York&#39;, &#39;new york city&#39;: &#39;New York&#39;, &#39;Los Angeles&#39;: &#39;Los Angeles&#39;, &#39;LA&#39;: &#39;Los Angeles&#39;, &#39;San Francisco&#39;: &#39;San Francisco&#39;, &#39;San Fran&#39;: &#39;San Francisco&#39;}</span>
+</code></pre>
+</div>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Replace values</span>
+<span class="n">replaced_texts</span> <span class="o">=</span> <span class="n">clusterer</span><span class="o">.</span><span class="n">replace_values</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Replaced texts:&quot;</span><span class="p">,</span> <span class="n">replaced_texts</span><span class="p">)</span>
+
+<span class="c1"># Replaced texts: [&#39;New York&#39;, &#39;Los Angeles&#39;, &#39;San Francisco&#39;, &#39;New York&#39;, &#39;Los Angeles&#39;, &#39;San Francisco&#39;]</span>
+</code></pre>
+</div>
+
+    </main>
+    <footer>
+      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>
