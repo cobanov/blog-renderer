@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+  <head>
+    <script>
+      // Immediately set theme before anything else
+      document.documentElement.className =
+        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simplest Blog</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <a href="/" id="head-link">cobanov's blog</a>
+      <nav class="main-nav">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/blog/" class="nav-link">Blog</a>
+        <a href="/projects/" class="nav-link">Projects</a>
+      </nav>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="social-icons">
+          <a
+            href="https://github.com/cobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <i class="fab fa-github"></i>
+          </a>
+          <a
+            href="https://twitter.com/mertcobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+          >
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="post-date">2025-05-07</div>
+      <h1>Simplest Blog</h1>
+
+<p>A minimal, fast, and easy-to-use blog system built with Python and Markdown. This project focuses on simplicity and performance while maintaining a clean and modern design.</p>
+
+<h2>Features</h2>
+
+<ul>
+<li>Markdown-based content management</li>
+<li>Dark/Light theme support</li>
+<li>Responsive design</li>
+<li>Multi-language support</li>
+<li>Syntax highlighting for code blocks</li>
+<li>Fast and lightweight</li>
+</ul>
+
+<h2>Technologies Used</h2>
+
+<ul>
+<li>Python</li>
+<li>Markdown</li>
+<li>HTML/CSS</li>
+<li>JavaScript</li>
+</ul>
+
+<h2>Project Structure</h2>
+
+<pre><code>.
+├── posts/          # Blog posts in markdown
+├── projects/       # Project pages in markdown
+├── pages/          # Static pages
+├── blog/           # Generated HTML files
+├── template.html   # HTML template
+├── styles.css      # Styles
+└── render.py       # Build script
+</code></pre>
+
+<h2>How It Works</h2>
+
+<p>The blog uses a simple Python script to convert Markdown files into HTML pages. Each post and project is written in Markdown format, making it easy to write and maintain content.</p>
+
+<h2>Future Improvements</h2>
+
+<ul>
+<li>Add RSS feed support</li>
+<li>Implement search functionality</li>
+<li>Add more customization options</li>
+<li>Support for custom themes</li>
+</ul>
+
+    </main>
+    <footer>
+      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>

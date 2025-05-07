@@ -1,0 +1,15 @@
+# config.yaml
+pages_dir: pages
+blog_dir: blog
+projects_dir: projects
+output_dir: static_website
+template: template.html
+
+assets:
+  - styles.css
+  - main.js
+
+markdown_extras:
+  - fenced-code-blocks
+  - code-friendly
+  - highlight

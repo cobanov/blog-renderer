@@ -1,0 +1,253 @@
+:root {
+  --text-color: #333;
+  --bg-color: #fff;
+  --border-color: #e0e0e0;
+  --link-color: #0066cc;
+  --link-hover-color: #004499;
+  --code-bg: #f6f8fa;
+  --date-color: #666;
+  --footer-color: #888;
+  --code-keyword: #0000ff;
+  --code-string: #a31515;
+  --code-comment: #008000;
+  --code-function: #795e26;
+  --code-number: #098658;
+  --code-operator: #000000;
+  --code-variable: #001080;
+}
+
+html.dark-theme {
+  --text-color: #eee;
+  --bg-color: #1a1a1a;
+  --border-color: #333;
+  --link-color: #66b3ff;
+  --link-hover-color: #99ccff;
+  --code-bg: #0d1117;
+  --date-color: #999;
+  --footer-color: #aaa;
+  --code-keyword: #569cd6;
+  --code-string: #ce9178;
+  --code-comment: #6a9955;
+  --code-function: #dcdcaa;
+  --code-number: #b5cea8;
+  --code-operator: #d4d4d4;
+  --code-variable: #9cdcfe;
+}
+
+/* Base styles */
+html,
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 70ch;
+  padding: 1.5em 1em;
+  margin: auto;
+  line-height: 1.5;
+  font-size: 1em;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Header & navigation */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2em;
+}
+
+#head-link {
+  color: var(--text-color);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.main-nav {
+  display: flex;
+  gap: 1.5em;
+}
+
+.nav-link {
+  position: relative;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 0.95em;
+  padding: 0.3em 0;
+  transition: color 0.2s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--link-color);
+  transition: width 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--link-color);
+  text-decoration: none; /* disable generic underline */
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+#theme-toggle {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.5em;
+  font-size: 1.2em;
+  transition: opacity 0.2s ease;
+}
+
+#theme-toggle:hover {
+  opacity: 0.7;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1em;
+}
+
+.social-icons a {
+  color: var(--text-color);
+  font-size: 1.2em;
+  transition: opacity 0.2s ease;
+}
+
+.social-icons a:hover {
+  opacity: 0.7;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 1.5em 0 0.5em;
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+/* Scoped in-content links */
+.content a {
+  color: var(--link-color);
+  text-decoration: none;
+  border-bottom: 1px solid var(--link-color);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.content a:hover {
+  border-bottom-color: var(--link-hover-color);
+  color: var(--link-hover-color);
+}
+
+/* Post date */
+.post-date {
+  color: var(--date-color);
+  font-size: 0.8em;
+  margin-bottom: 1.5em;
+  font-style: italic;
+}
+
+/* Code blocks */
+pre {
+  background: var(--code-bg);
+  border-radius: 8px;
+  margin: 1.5em 0;
+  padding: 1.5em;
+  overflow: auto;
+  font-size: 0.9em;
+  line-height: 1.5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+code {
+  font-family: "Fira Code", Consolas, Monaco, monospace;
+  background: var(--code-bg);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+/* Syntax highlighting */
+.token.comment {
+  color: var(--code-comment);
+  font-style: italic;
+}
+
+.token.keyword {
+  color: var(--code-keyword);
+}
+
+.token.string {
+  color: var(--code-string);
+}
+
+.token.function {
+  color: var(--code-function);
+}
+
+.token.number,
+.token.constant {
+  color: var(--code-number);
+}
+
+.token.operator,
+.token.punctuation {
+  color: var(--code-operator);
+}
+
+.token.variable {
+  color: var(--code-variable);
+}
+
+/* Dark theme overrides for hljs */
+html.dark-theme .hljs {
+  background: var(--code-bg);
+  color: #c9d1d9;
+}
+
+html.dark-theme .hljs-keyword,
+html.dark-theme .hljs-selector-tag,
+html.dark-theme .hljs-subst {
+  color: #ff7b72;
+}
+
+html.dark-theme .hljs-string,
+html.dark-theme .hljs-doctag {
+  color: #a5d6ff;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em auto;
+}
+
+/* Footer */
+footer {
+  margin-top: 2em;
+  padding: 1em 0;
+  border-top: 1px solid var(--border-color);
+  color: var(--footer-color);
+  font-size: 0.8em;
+  text-align: center;
+}
