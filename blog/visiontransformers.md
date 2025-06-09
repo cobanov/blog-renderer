@@ -1,3 +1,5 @@
+2022-12-18
+
 # What are Vision Transformers?
 
 2022 became the year of artificial intelligence, with incredible developments in AI art, natural language processing, computer vision, and audio technologies. Both [Hugging Face](https://huggingface.co/) and [OpenAI](https://openai.com/) made waves in the field. Compared to previous years, these AI technologies became more democratized and reached end users more effectively.

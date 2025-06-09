@@ -1,3 +1,5 @@
+2025-06-06
+
 # The Generative AI Revolution I Witnessed
 
 I've been in the generative AI space since its very first heartbeats. Throughout this journey, I've had the chance to try _every technology_, _every innovation_, _every model_ that came out. I've built countless projects and even contributed to many of them.
@@ -6,7 +8,7 @@ I've been in the generative AI space since its very first heartbeats. Throughout
 
 In the early days, it was criticized for **_inadequate and random outputs_** (language models included). Then came the critiques that it would **never reach human-level performance**. During the period when it couldn't produce sufficiently realistic outputs but succeeded in more abstract arts, there were small pushbacks mixed with mild fear, claiming _"this isn't real art"_ - it was even dismissed. When realism improved, everyone was impressed, but simultaneously there were attempts to build public opinion that **"we should stop AI."**
 
-![](https://raw.githubusercontent.com/cobanov/blog-renderer/refs/heads/main/assets/TimeToDisco(0)_14.png)
+![](<https://raw.githubusercontent.com/cobanov/blog-renderer/refs/heads/main/assets/TimeToDisco(0)_14.png>)
 
 ## Today: Ubiquitous and Indispensable
 

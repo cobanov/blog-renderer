@@ -1,6 +1,7 @@
+2024-01-21
+
 # Generative AI Art
 
-Date: December 15, 2023  
 Author: Mert Cobanov
 
 ---

@@ -1,3 +1,5 @@
+2024-09-11
+
 # Piracy
 
 ![Meme about digital ownership showing a person holding a game case vs digital download](https://pbs.twimg.com/media/GYxoao2XQAUSgto?format=jpg&name=large)
