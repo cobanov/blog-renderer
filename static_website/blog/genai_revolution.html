@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+  <head>
+    <script>
+      // Immediately set theme before anything else
+      document.documentElement.className =
+        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Generative AI Revolution I Witnessed</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <a href="/" id="head-link">cobanov</a>
+      <nav class="main-nav">
+        <a href="/blog/" class="nav-link">Blog</a>
+        <a href="/projects/" class="nav-link">Projects</a>
+      </nav>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="social-icons">
+          <a
+            href="https://github.com/cobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <i class="fab fa-github"></i>
+          </a>
+          <a
+            href="https://twitter.com/mertcobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+          >
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="post-date">2025-06-09</div>
+      <h1>The Generative AI Revolution I Witnessed</h1>
+
+<p>I've been in the generative AI space since its very first heartbeats. Throughout this journey, I've had the chance to try every technology, every innovation, every model that came out. I've built countless projects and even contributed to many of them.</p>
+
+<p>In the early days, it was criticized for inadequate and random outputs (language models included). Then came the critiques that it would never reach human-level performance. During the period when it couldn't produce sufficiently realistic outputs but succeeded in more abstract arts, there were small pushbacks mixed with mild fear, claiming "this isn't real art" - it was even dismissed. When realism improved, everyone was impressed, but simultaneously there were attempts to build public opinion that "we should stop AI."</p>
+
+<p>Today, we've reached a point where it's everywhere in our lives. It accelerates our work, solves many of our problems, and we can barely distinguish it anymore. But it's certain that it empowers us and we don't want to remove it from our lives. Throughout this entire development process, I noticed one thing: no matter what, if a thread starts to unravel, there will always be people who pull it all the way through. I was part of that, and I always advocated for it.</p>
+
+<p>During this process, all developers worked both for better outputs and to run more efficiently on lower-end hardware. No matter what anyone said, someone always kept going and believed. When they hit a wall or reached a limit, they didn't stop - they changed the game and pushed the boundaries. (Think latent diffusion, flash attention, low-rank adaptation, PEFT, AI tooling, agent MCP - the list goes on)</p>
+
+<p>If you noticed, throughout the entire development cycle, people continuously created new things until they reached saturation in each respective area. First, we generated images with Disco Diffusion - low resolution, taking minutes. Then latent upscalers came along, and we tried to enlarge those small images. Next, depth estimation models were invented, we did the first video experiments with depth warp and optical flow. Then Stable Diffusion arrived, prompts got optimized, images became more promising. Then xFormers came and everything accelerated incredibly. We saw models that could produce outputs in just 4-5 steps. We started conditioning those invented depth models with ControlNet for style transfer, and so on. Then we saw the first text2video models, with audio models added in parallel.</p>
+
+<p>Where we stand today, they've reached cinematic quality - voices are nearly impossible to distinguish. I'm not even talking about language models. AI opposition has vanished, and the limits of "language models and image models can only do this much" have disappeared.</p>
+
+<p>The most beautiful part is that almost everything was done open source. In other words, the world's most important technology right now was realized and developed through the collective effort of all people worldwide. That's a spine-tingling feeling, in my opinion.</p>
+
+<hr />
+
+<p>_By Mert Cobanov on June 6, 2025_</p>
+
+    </main>
+    <footer>
+      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>
