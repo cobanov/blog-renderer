@@ -11,5 +11,5 @@ assets:
 
 markdown_extras:
   - fenced-code-blocks
-  - code-friendly
   - highlight
+  - smarty-pants
