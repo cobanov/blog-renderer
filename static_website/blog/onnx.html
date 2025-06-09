@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+  <head>
+    <script>
+      // Immediately set theme before anything else
+      document.documentElement.className =
+        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What is ONNX? Why Should You Learn It?</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <a href="/" id="head-link">cobanov</a>
+      <nav class="main-nav">
+        <a href="/blog/" class="nav-link">Blog</a>
+        <a href="/projects/" class="nav-link">Projects</a>
+      </nav>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="social-icons">
+          <a
+            href="https://github.com/cobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <i class="fab fa-github"></i>
+          </a>
+          <a
+            href="https://twitter.com/mertcobanov"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+          >
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="post-date">2025-06-09</div>
+      <h1>What is ONNX? Why Should You Learn It?</h1>
+
+<p>The most practical way to deploy deep learning models everywhere.</p>
+
+<blockquote>
+  <p>You can access all the code from this article in my <a href="https://github.com/cobanov/onnx-examples">GitHub repository</a>.</p>
+</blockquote>
+
+<h2>Who Should Read This Article</h2>
+
+<p>Learning to use ONNX will definitely come in handy if you're working on machine learning, deep learning, or AI projects. With AI creeping into even the simplest applications these days, if you're curious about how to leverage it when the need arises, or if any of the situations below apply to you, I'd recommend giving this a read.</p>
+
+<ul>
+<li>If you have limited knowledge about deep learning models but you're a web or mobile developer</li>
+<li>If you need to run your AI models on different types of devices</li>
+<li>If you want to optimize your existing models</li>
+<li>If you need to quickly deploy pre-trained AI models</li>
+<li>If you're forced to use multiple deep learning frameworks in the same application</li>
+<li>If you need to create a model in one programming language and then deploy it in a completely different environment (for example, creating a model in Python but deploying it in C# or JavaScript)</li>
+<li>Probably other scenarios I haven't thought of that you'll find in the <a href="https://onnxruntime.ai/">documentation</a></li>
+</ul>
+
+<h2>What You'll Learn in This Article</h2>
+
+<ul>
+<li>What is ONNX?</li>
+<li>When will you need ONNX?</li>
+<li>Sample ONNX projects and code</li>
+<li>How to quickly use models with the ONNX model zoo</li>
+</ul>
+
+<h2>What is ONNX?</h2>
+
+<p>As is customary, before explaining what <a href="https://onnx.ai/">ONNX</a> is and what it does, I could mention trivial facts like "it was developed by Microsoft and Facebook, supported by many developers under the Linux Foundation" that you'll never actually use. But I'd rather skip the fluff and get straight to explaining what this thing actually does.</p>
+
+<p><a href="https://onnx.ai/">ONNX</a> allows us to create models using all the deep learning frameworks we know and love like <a href="https://pytorch.org/">PyTorch</a> and <a href="https://www.tensorflow.org/">TensorFlow</a>, and package them in a format that's supported across various hardware and operating systems. Think of it as a cross-platform API of sorts. Whether it's cloud, mobile, IoT, or wherever your mind wanders, it aims to solve problems across all these platforms.</p>
+
+<p><a href="https://onnx.ai/">ONNX, which stands for "Open Neural Network Exchange"</a> is a standard developed for deep learning and various machine learning models. This standard makes AI models developed by different deep learning frameworks (such as <a href="https://pytorch.org/">PyTorch</a>, <a href="https://www.tensorflow.org/">TensorFlow</a>, <a href="https://caffe2.ai/">Caffe2</a>, etc.) portable and interoperable with each other.</p>
+
+<p>So, by converting a deep learning model to <a href="https://onnx.ai/">ONNX</a> format, you can seamlessly use, share, and run this model across different frameworks. This gives us flexibility and makes it easier to share data and models between projects working with different frameworks (say, from PyTorch to TensorFlow).</p>
+
+<p>But that's not all it brings to the table. It also tries to make the model you want to run device-agnostic (independent of CPU, GPU, FPGA, or TPU). Along with this, you're essentially leaving the optimization for different hardware to ONNX.</p>
+
+<p>Additionally, the <a href="https://github.com/onnx/models">model zoo</a> that I'll discuss later in the article, much like <a href="https://hub.docker.com/">Docker Hub</a>, allows you to quickly spin up pre-trained, ready-to-use ONNX models. What do I mean? For example, you can handle object detection with <a href="https://pjreddie.com/darknet/yolo/">YOLO</a> in just a few lines and get it ready for use on any device within minutes, because someone has already prepared and packaged the entire system for you.</p>
+
+<p>Before diving into the details, let me show you an example to help you visualize this.</p>
+
+<h2>Possible Scenarios</h2>
+
+<p>Let's say you have a machine learning model that detects flower types from photos. You perform this task by uploading a photo from your computer and making predictions, using your classic x86 processor or Nvidia graphics card. However, when you want to do this on an iPhone 15 with an A16 Bionic chip, Apple will force you to use CoreML because you need to run this on the Neural Processing Unit (NPU), also known as the Apple Neural Engine.</p>
+
+<p>You can quickly convert your machine learning model to a CoreML model using ONNX. You'll use the <code>tf2onnx</code> library to convert your Keras model to ONNX, and then use the <code>onnx-coreml</code> library to convert ONNX to a Core ML model. You're ready to deploy in CoreML.</p>
+
+<h3>2. TFLite on Edge Devices</h3>
+
+<p>You have a PyTorch model and want to convert it to TFLite to run on your edge devices. You have IoT devices or smartphones that support TFLite. You want to reduce your model size or have other similar challenges.</p>
+
+<h3>3. Other Scenarios</h3>
+
+<ul>
+<li>You need to use AI models in your web application</li>
+<li>You have a project that needs to run in a Node.js environment using the <code>onnxruntime-node</code> npm package</li>
+<li>You want to run these models on AzureML or other cloud providers</li>
+<li>You want to quickly pull ready-made models from the model zoo and get them ready for use (I'll elaborate on this)</li>
+</ul>
+
+<h2>Sample Projects</h2>
+
+<p>ONNX essentially highlights two main concepts. First, saving your conventional machine learning models (e.g., Scikit-Learn) in ONNX format and then using them on any device or platform. Second, converting a TensorFlow or PyTorch model to ONNX format. Let's jump into our examples without wasting time.</p>
+
+<h3>Example 1: scikit-learn &amp; ONNX</h3>
+
+<p>I'm bringing a basic <a href="https://onnx.ai/sklearn-onnx/">documentation example</a> here and let's examine it piece by piece.</p>
+
+<p>Let's make the necessary imports to build a simple <a href="https://scikit-learn.org/stable/index.html">Scikit-Learn</a> model using the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set">Iris dataset</a> (the national dataset of machine learning experts) and the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html">Random Forest Classifier</a> (the indispensable model of basic machine learning examples).</p>
+
+<pre><code>import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+</code></pre>
+
+<p>Let's instantiate the model and quickly fit it. If you're already here to learn ONNX, I assume you won't find it wrong that I expect you to understand these basic parts quickly.</p>
+
+<pre><code>iris = load_iris()
+
+X, y = iris.data, iris.target
+X = X.astype(np.float32)
+X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+clr = RandomForestClassifier()
+clr.fit(X_train, y_train)
+</code></pre>
+
+<p>This code converts a machine learning model trained with Scikit-Learn to ONNX format and saves this converted model to a file called "rf_iris.onnx". The ONNX format will enable the model to be usable across different platforms and devices.</p>
+
+<pre><code>from skl2onnx import to_onnx
+
+onx = to_onnx(clr, X[:1])
+with open("rf_iris.onnx", "wb") as f:
+    f.write(onx.SerializeToString())
+</code></pre>
+
+<p>Let's load a machine learning model in ONNX format, use this model to make predictions on data, and obtain results.</p>
+
+<pre><code>import onnxruntime as rt
+
+sess = rt.InferenceSession("rf_iris.onnx", providers=["CPUExecutionProvider"])
+input_name = sess.get_inputs()[0].name
+label_name = sess.get_outputs()[0].name
+pred_onx = sess.run([label_name], {input_name: X_test.astype(np.float32)})[0]
+</code></pre>
+
+<h3>Example 2: TensorFlow &amp; ONNX</h3>
+
+<p>In this example, you can see how to convert a <a href="https://www.tensorflow.org/">TensorFlow</a> or <a href="https://keras.io/">Keras</a> model to ONNX format.</p>
+
+<p>Now, if you're wondering why we should convert to ONNX when the TensorFlow model already works, and why we'd need this, as I mentioned above, we do this because we want to make it framework or device agnostic. Also, as I'll mention in the next blog post, you'll use this when working with platforms like <a href="https://azure.microsoft.com/">Azure</a> or AWS, or if you want to build a mobile application.</p>
+
+<pre><code>import tensorflow as tf
+import tf2onnx
+
+tf_model = tf.keras.models.load_model('tf_model.h5')
+onnx_model = tf2onnx.convert.from_keras(tf_model)
+
+onnx_model_path = 'converted_model.onnx'
+with open(onnx_model_path, 'wb') as f:
+    f.write(onnx_model.SerializeToString())
+
+print("Model converted to ONNX and saved as:", onnx_model_path)
+</code></pre>
+
+<h2>More Technical Details</h2>
+
+<p>I mentioned that ONNX models optimize the models we're already using. ONNX runtime offers you some performance advantages.</p>
+
+<p>Some of these techniques include JIT (Just-In-Time Compilation), kernel fusion, and subgraph partitioning.</p>
+
+<p>Additionally, there's thread pooling support for distributed systems. These are features that can be useful when making larger-scale deployments. There's really no simple way to explain these - they're actually topics for entirely different blogs, but I'm leaving relevant links for those who are curious.</p>
+
+<ul>
+<li>Just-In-Time Compilation: https://www.freecodecamp.org/news/just-in-time-compilation-explained/</li>
+<li>Kernel Fusion: https://stackoverflow.com/questions/53305830/cuda-how-does-kernel-fusion-improve-performance-on-memory-bound-applications-on</li>
+<li>Subgraph Partitioning: https://en.wikipedia.org/wiki/Graph_partition</li>
+<li>Thread pooling: https://superfastpython.com/threadpool-python/</li>
+</ul>
+
+<h2>ONNX Model Zoo</h2>
+
+<p><a href="https://github.com/onnx/models">ONNX Model Zoo</a> is a platform where volunteer developers collect various pre-trained models in ONNX format. Alongside these models, they also add Jupyter notebook examples for model training and inference with the trained models. References to the datasets used in training and original papers describing the model architecture are also included. This way, we can quickly grab and use these models without reinventing the wheel. Git LFS (Large File Storage) is used to store these models.</p>
+
+<pre><code>import onnx
+from onnx_tf.backend import prepare
+import numpy as np
+from PIL import Image
+import json
+
+# Load the ONNX model
+
+# Use local model
+model_path = './vgg19-7.onnx'
+model = onnx.load(model_path)
+
+## Download from hub
+# model_path = 'vgg 19'
+# model = onnx.hub.load(model_path)
+
+# Prepare the ONNX model for TensorFlow
+tf_model = prepare(model)
+
+# Display input and output nodes of the model
+print("Input nodes:", tf_model.inputs)
+print("Output nodes:", tf_model.outputs)
+
+# Load class labels from a JSON file
+with open('labels.json', 'r') as json_file:
+    label_data = json.load(json_file)
+
+# Load and preprocess the input image
+input_image_path = 'frog.jpg'
+input_image = Image.open(input_image_path).resize((224, 224))
+input_image = np.asarray(input_image, dtype=np.float32)[np.newaxis, np.newaxis, :, :]
+input_image = input_image.transpose(0, 1, 4, 2, 3)
+input_image = input_image.reshape(1, 3, 224, 224)  # Transform to Input Tensor
+
+# Run inference on the input image
+output = tf_model.run(input_image)[0][0]
+
+# Find the top 5 class indices
+top_indices = np.argpartition(output, -5)[-5:]
+
+# Display the top 5 class labels and their scores
+for i in top_indices:
+    class_label = label_data.get(str(i), "Unknown")
+    class_score = output[i]
+    print(f"Class: {class_label}, Score: {class_score:.4f}")
+</code></pre>
+
+<pre><code># Output
+
+Class: American chameleon, anole, Anolis carolinensis, Score: 85.1076
+Class: green lizard, Lacerta viridis, Score: 92.0642
+Class: bullfrog, Rana catesbeiana, Score: 103.7489
+Class: tailed frog, bell toad, ribbed toad, tailed toad, Ascaphus trui, Score: 157.5779
+Class: tree frog, tree-frog, Score: 186.0841
+</code></pre>
+
+<h2>Conclusion</h2>
+
+<p>ONNX has recently started playing an extremely important role in the AI and machine learning world, establishing itself as a standard. It solves problems between different deep learning frameworks and enables models to work and be deployed seamlessly across different platforms and devices.</p>
+
+<p>_Mert Cobanov_</p>
+
+<p><a href="https://twitter.com/mertcobanov">Twitter</a>, <a href="https://www.linkedin.com/in/mertcobanoglu/">LinkedIn</a></p>
+
+<blockquote>
+  <p>You can access all the code from this article in my <a href="https://github.com/cobanov/onnx-examples">GitHub repository</a>.</p>
+</blockquote>
+
+<h2>References</h2>
+
+<ul>
+<li>https://learn.microsoft.com/en-us/azure/machine-learning/concept-onnx?view=azureml-api-2</li>
+<li>https://onnx.ai/supported-tools</li>
+<li>https://blog.roboflow.com/what-is-onnx/</li>
+<li>https://blog.roboflow.com/what-is-tensorrt/</li>
+<li>https://towardsdatascience.com/onnx-the-standard-for-interoperable-deep-learning-models-a47dfbdf9a09</li>
+<li>https://blog.paperspace.com/what-every-ml-ai-developer-should-know-about-onnx/</li>
+<li>https://www.linkedin.com/pulse/what-onnx-machine-learning-model-why-should-you-care-bhattiprolu/</li>
+<li>https://en.wikipedia.org/wiki/Open_Neural_Network_Exchange</li>
+<li>https://medium.com/geekculture/onnx-in-a-nutshell-4b584cbae7f5</li>
+<li>https://onnx.ai/sklearn-onnx/introduction.html</li>
+<li>https://pytorch.org/tutorials/advanced/super_resolution_with_onnxruntime.html</li>
+<li>https://viso.ai/edge-ai/tensorflow-lite/</li>
+<li>https://towardsdatascience.com/7-lessons-ive-learnt-from-deploying-machine-learning-models-using-onnx-3e993da4028c</li>
+</ul>
+
+<hr />
+
+<p>_By Mert Cobanov on October 7, 2023_</p>
+
+    </main>
+    <footer>
+      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>

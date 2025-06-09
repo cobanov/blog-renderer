@@ -1,4 +1,4 @@
-# English tmux Guide
+# Introduction to TMUX
 
 **tmux** is a terminal multiplexer that we use especially when managing long-running or multiple terminal sessions. This tool allows users to manage multiple terminal sessions within a single interface.
 
