@@ -56,7 +56,7 @@
       </div>
     </header>
     <main>
-      <div class="post-date">2025-05-07</div>
+      <div class="post-date">2025-06-09</div>
       <h1>semaclust</h1>
 
 <p><strong>semaclust</strong> (semantic + clustering) is a lightweight Python package for semantic text clustering using sentence embeddings and agglomerative clustering.</p>
@@ -71,47 +71,37 @@
 
 <h2>Installation</h2>
 
-<div class="codehilite">
-<pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/cobanov/semaclust.git
+<pre><code>pip install git+https://github.com/cobanov/semaclust.git
 </code></pre>
-</div>
 
 <h2>Usage</h2>
 
-<div class="codehilite">
-<pre><span></span><code><span class="c1"># Create clusterer</span>
-<span class="n">clusterer</span> <span class="o">=</span> <span class="n">TextClusterer</span><span class="p">()</span>
+<pre><code># Create clusterer
+clusterer = TextClusterer()
 
-<span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;New York&quot;</span><span class="p">,</span> <span class="s2">&quot;Los Angeles&quot;</span><span class="p">,</span> <span class="s2">&quot;San Francisco&quot;</span><span class="p">,</span> <span class="s2">&quot;new york city&quot;</span><span class="p">,</span> <span class="s2">&quot;LA&quot;</span><span class="p">,</span> <span class="s2">&quot;San Fran&quot;</span><span class="p">]</span>
+texts = ["New York", "Los Angeles", "San Francisco", "new york city", "LA", "San Fran"]
 </code></pre>
-</div>
 
-<div class="codehilite">
-<pre><span></span><code><span class="c1"># Get clusters</span>
-<span class="n">clusters</span> <span class="o">=</span> <span class="n">clusterer</span><span class="o">.</span><span class="n">cluster</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Clusters:&quot;</span><span class="p">,</span> <span class="n">clusters</span><span class="p">)</span>
+<pre><code># Get clusters
+clusters = clusterer.cluster(texts)
+print("Clusters:", clusters)
 
-<span class="c1"># Clusters: {1: [&#39;New York&#39;, &#39;new york city&#39;], 2: [&#39;Los Angeles&#39;, &#39;LA&#39;], 0: [&#39;San Francisco&#39;, &#39;San Fran&#39;]}</span>
+# Clusters: {1: ['New York', 'new york city'], 2: ['Los Angeles', 'LA'], 0: ['San Francisco', 'San Fran']}
 </code></pre>
-</div>
 
-<div class="codehilite">
-<pre><span></span><code><span class="c1"># Get replacement map</span>
-<span class="n">replacement_map</span> <span class="o">=</span> <span class="n">clusterer</span><span class="o">.</span><span class="n">get_replacement_map</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Replacement map:&quot;</span><span class="p">,</span> <span class="n">replacement_map</span><span class="p">)</span>
+<pre><code># Get replacement map
+replacement_map = clusterer.get_replacement_map(texts)
+print("\nReplacement map:", replacement_map)
 
-<span class="c1"># Replacement map: {&#39;New York&#39;: &#39;New York&#39;, &#39;new york city&#39;: &#39;New York&#39;, &#39;Los Angeles&#39;: &#39;Los Angeles&#39;, &#39;LA&#39;: &#39;Los Angeles&#39;, &#39;San Francisco&#39;: &#39;San Francisco&#39;, &#39;San Fran&#39;: &#39;San Francisco&#39;}</span>
+# Replacement map: {'New York': 'New York', 'new york city': 'New York', 'Los Angeles': 'Los Angeles', 'LA': 'Los Angeles', 'San Francisco': 'San Francisco', 'San Fran': 'San Francisco'}
 </code></pre>
-</div>
 
-<div class="codehilite">
-<pre><span></span><code><span class="c1"># Replace values</span>
-<span class="n">replaced_texts</span> <span class="o">=</span> <span class="n">clusterer</span><span class="o">.</span><span class="n">replace_values</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Replaced texts:&quot;</span><span class="p">,</span> <span class="n">replaced_texts</span><span class="p">)</span>
+<pre><code># Replace values
+replaced_texts = clusterer.replace_values(texts)
+print("\nReplaced texts:", replaced_texts)
 
-<span class="c1"># Replaced texts: [&#39;New York&#39;, &#39;Los Angeles&#39;, &#39;San Francisco&#39;, &#39;New York&#39;, &#39;Los Angeles&#39;, &#39;San Francisco&#39;]</span>
+# Replaced texts: ['New York', 'Los Angeles', 'San Francisco', 'New York', 'Los Angeles', 'San Francisco']
 </code></pre>
-</div>
 
     </main>
     <footer>

@@ -56,20 +56,16 @@
       </div>
     </header>
     <main>
-      <div class="post-date">2025-05-07</div>
+      <div class="post-date">2025-06-09</div>
       <h1>Kamera</h1>
 
 <p><strong>Kamera</strong> makes real-time webcam streaming effortless. The only thing you need to know is:</p>
 
-<div class="codehilite">
-<pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>kamera
+<pre><code>pip install kamera
 </code></pre>
-</div>
 
-<div class="codehilite">
-<pre><span></span><code>kamera
+<pre><code>kamera
 </code></pre>
-</div>
 
 <p>And voilà! Your webcam is live and streaming at <code>http://localhost:4141</code>. No setup headaches, just instant results.</p>
 
@@ -114,14 +110,12 @@
 
 <p>Example request (using <code>curl</code>):</p>
 
-<div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:4141/settings<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-d<span class="w"> </span><span class="s2">&quot;rotate=90&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-d<span class="w"> </span><span class="s2">&quot;brightness=1.5&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-d<span class="w"> </span><span class="s2">&quot;grayscale=true&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-d<span class="w"> </span><span class="s2">&quot;filter_name=sepia&quot;</span>
+<pre><code>curl -X POST http://localhost:4141/settings \
+  -d "rotate=90" \
+  -d "brightness=1.5" \
+  -d "grayscale=true" \
+  -d "filter_name=sepia"
 </code></pre>
-</div>
 
 <h2>License</h2>
 

@@ -56,7 +56,7 @@
       </div>
     </header>
     <main>
-      <div class="post-date">2025-05-07</div>
+      <div class="post-date">2025-06-09</div>
       <h1>Image Captioning</h1>
 
 <p>Captioning is an img2txt model that uses the BLIP. Exports captions of images.</p>
@@ -97,26 +97,22 @@ datasets\1044.jpg, a woman sitting on the floor in front of a door
 
 <h2>Usage</h2>
 
-<div class="codehilite">
-<pre><span></span><code>usage:<span class="w"> </span>inference.py<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-i<span class="w"> </span>INPUT<span class="o">]</span><span class="w"> </span><span class="o">[</span>-b<span class="w"> </span>BATCH<span class="o">]</span><span class="w"> </span><span class="o">[</span>-p<span class="w"> </span>PATHS<span class="o">]</span><span class="w"> </span><span class="o">[</span>-g<span class="w"> </span>GPU_ID<span class="o">]</span>
+<pre><code>usage: inference.py [-h] [-i INPUT] [-b BATCH] [-p PATHS] [-g GPU_ID]
 
-Image<span class="w"> </span>caption<span class="w"> </span>CLI
+Image caption CLI
 
-optional<span class="w"> </span>arguments:
-<span class="w">  </span>-h,<span class="w"> </span>--help<span class="w">                      </span>show<span class="w"> </span>this<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span>
-<span class="w">  </span>-i<span class="w"> </span>INPUT,<span class="w">  </span>--input<span class="w"> </span>INPUT<span class="w">        </span>Input<span class="w"> </span>directoryt<span class="w"> </span>path,<span class="w"> </span>such<span class="w"> </span>as<span class="w"> </span>./images
-<span class="w">  </span>-b<span class="w"> </span>BATCH,<span class="w">  </span>--batch<span class="w"> </span>BATCH<span class="w">        </span>Batch<span class="w"> </span>size
-<span class="w">  </span>-p<span class="w"> </span>PATHS,<span class="w">  </span>--paths<span class="w"> </span>PATHS<span class="w">        </span>A<span class="w"> </span>any.txt<span class="w"> </span>files<span class="w"> </span>contains<span class="w"> </span>all<span class="w"> </span>image<span class="w"> </span>paths.
-<span class="w">  </span>-g<span class="w"> </span>GPU_ID,<span class="w"> </span>--gpu-id<span class="w"> </span>GPU_ID<span class="w">      </span>gpu<span class="w"> </span>device<span class="w"> </span>to<span class="w"> </span>use<span class="w"> </span><span class="o">(</span><span class="nv">default</span><span class="o">=</span><span class="m">0</span><span class="o">)</span><span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span><span class="m">0</span>,1,2<span class="w"> </span><span class="k">for</span><span class="w"> </span>multi-gpu
+optional arguments:
+  -h, --help                      show this help message and exit
+  -i INPUT,  --input INPUT        Input directoryt path, such as ./images
+  -b BATCH,  --batch BATCH        Batch size
+  -p PATHS,  --paths PATHS        A any.txt files contains all image paths.
+  -g GPU_ID, --gpu-id GPU_ID      gpu device to use (default=0) can be 0,1,2 for multi-gpu
 </code></pre>
-</div>
 
 <h3>Example</h3>
 
-<div class="codehilite">
-<pre><span></span><code>python<span class="w"> </span>inference.py<span class="w"> </span>-i<span class="w"> </span>/path/images/folder<span class="w"> </span>--batch<span class="w"> </span><span class="m">8</span><span class="w"> </span>--gpu<span class="w"> </span><span class="m">0</span>
+<pre><code>python inference.py -i /path/images/folder --batch 8 --gpu 0
 </code></pre>
-</div>
 
 <h2>Contributing</h2>
 
