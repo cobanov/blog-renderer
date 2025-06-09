@@ -56,12 +56,14 @@
       </div>
     </header>
     <main>
-      <div class="post-date">2025-06-09</div>
-      <h1>Introduction to TMUX</h1>
+      <div class="post-date">2023-12-23</div>
+      <p>2023-12-23</p>
+
+<h1>Introduction to TMUX</h1>
 
 <p><strong>tmux</strong> is a terminal multiplexer that we use especially when managing long-running or multiple terminal sessions. This tool allows users to manage multiple terminal sessions within a single interface.</p>
 
-<p>It's particularly useful when you need to focus on multiple tasks simultaneously, greatly streamlining your workflow.</p>
+<p>It&#8217;s particularly useful when you need to focus on multiple tasks simultaneously, greatly streamlining your workflow.</p>
 
 <p>An important feature is that tmux sessions are preserved even if the connection is lost. This means that when working remotely with a server, if your connection drops, your tmux session continues running in the background, and when you reconnect, you can resume exactly where you left off. This is extremely useful, especially when dealing with unstable internet connections or running long-duration commands.</p>
 
@@ -72,7 +74,7 @@
 <p>tmux works like a powerful, flexible, and resilient control center for your command-line tasks, especially when managing remote sessions or switching between multiple tasks in a terminal environment.</p>
 
 <ul>
-<li><strong>Multiple Windows:</strong> tmux allows you to open multiple windows within a single terminal window. This is especially useful when working on a remote server where you can't open multiple terminal tabs like you would on your local machine.</li>
+<li><strong>Multiple Windows:</strong> tmux allows you to open multiple windows within a single terminal window. This is especially useful when working on a remote server where you can&#8217;t open multiple terminal tabs like you would on your local machine.</li>
 <li><strong>Sessions and Detaching:</strong> You can detach from a tmux session and leave it running in the background. This means you can start a long-running process within a tmux session, detach from it, and then reattach later, even from a different computer. This is invaluable for maintaining persistent sessions on remote servers for long-running tasks.</li>
 <li><strong>Persistent Sessions:</strong> If your connection to a server is lost (like losing an SSH connection), tmux keeps your session active. You can reconnect and continue exactly where you left off without losing anything.</li>
 <li><strong>Split Panes:</strong> tmux divides your terminal window into multiple panes horizontally and vertically. This is great for viewing the output of several commands simultaneously, monitoring, editing, or running multiple command-line applications side by side.</li>
@@ -80,7 +82,7 @@
 
 <h2>Installing tmux</h2>
 
-<p>_Source: <a href="https://github.com/tmux/tmux/wiki/Installing">https://github.com/tmux/tmux/wiki/Installing</a>_</p>
+<p><em>Source: <a href="https://github.com/tmux/tmux/wiki/Installing">https://github.com/tmux/tmux/wiki/Installing</a></em></p>
 
 <pre><code>╔════════════════════════╦═════════════════════╗
 ║        Platform        ║   Install Command   ║
@@ -104,7 +106,7 @@
 
 <p><img src="https://cdn-images-1.medium.com/max/3176/0*nPkiznvGZTispU-K.png" alt="" /></p>
 
-<p>To detach from a tmux session, press Ctrl+B followed by D (detach). tmux uses a series of key bindings (keyboard shortcuts) that are triggered by pressing a "prefix" combination. By default, the prefix is Ctrl+B. Then, press D (detach) to detach from the current session.</p>
+<p>To detach from a tmux session, press Ctrl+B followed by D (detach). tmux uses a series of key bindings (keyboard shortcuts) that are triggered by pressing a &#8220;prefix&#8221; combination. By default, the prefix is Ctrl+B. Then, press D (detach) to detach from the current session.</p>
 
 <pre><code>~ tmux ls # 0: 1 windows (created Thu Nov 30 20:16:45 2023)
 </code></pre>
@@ -129,7 +131,7 @@
 
 <p>Just as you have windows in a desktop environment, you have panes in tmux. Like windows, these panes allow you to interact with multiple applications and can similarly be opened, closed, resized, and moved.</p>
 
-<p>Unlike a standard desktop environment, these panes are tiled across the entire terminal and are mostly managed through tmux shortcuts _(although mouse functionality can be added)._ To create a new pane, you split the screen either horizontally or vertically.</p>
+<p>Unlike a standard desktop environment, these panes are tiled across the entire terminal and are mostly managed through tmux shortcuts <em>(although mouse functionality can be added).</em> To create a new pane, you split the screen either horizontally or vertically.</p>
 
 <h2>Vertical Screen Split</h2>
 
