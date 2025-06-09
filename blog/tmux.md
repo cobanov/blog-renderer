@@ -1,23 +1,23 @@
-# Türkçe tmux rehberi
+# English tmux Guide
 
-**tmux** bir terminal çoklayıcısıdır ve özellikle uzun süren veya çoklu terminal oturumlarını yönetirken kullanırız. Bu araç, kullanıcıların birden fazla terminal oturumunu tek bir arayüzde yönetmelerine olanak tanır.
+**tmux** is a terminal multiplexer that we use especially when managing long-running or multiple terminal sessions. This tool allows users to manage multiple terminal sessions within a single interface.
 
-Özellikle birden çok göreve aynı anda odaklanmanız gerektiğinde, iş akışınızı büyük ölçüde kolaylaştırmaya yarar.
+It's particularly useful when you need to focus on multiple tasks simultaneously, greatly streamlining your workflow.
 
-Önemli bir özelliği, tmux oturumlarının bağlantı kesilse bile korunmasıdır. Yani, bir sunucuyla uzaktan çalışırken bağlantınız kesilirse, tmux oturumunuz arka planda çalışmaya devam eder ve bağlantıyı yeniden kurduğunuzda kaldığınız yerden devam edebilirsiniz. Bu, özellikle kararsız internet bağlantıları olan veya uzun süreli komutlar çalıştırdığımızda oldukça işe yarıyor.
+An important feature is that tmux sessions are preserved even if the connection is lost. This means that when working remotely with a server, if your connection drops, your tmux session continues running in the background, and when you reconnect, you can resume exactly where you left off. This is extremely useful, especially when dealing with unstable internet connections or running long-duration commands.
 
-![tmux ekranı](https://cdn-images-1.medium.com/max/4000/0*YM1kUsmkKiF1zvPb.png)
+![tmux screen](https://cdn-images-1.medium.com/max/4000/0*YM1kUsmkKiF1zvPb.png)
 
-## tmux’a neden ihtiyacım olur?
+## Why would I need tmux?
 
-tmux, özellikle uzak oturumları yönetirken veya bir terminal ortamında birden fazla görevde gitgel yaparken, komut satırı işleriniz için güçlü, esnek ve dayanıklı bir kontrol merkezi gibi çalışır.
+tmux works like a powerful, flexible, and resilient control center for your command-line tasks, especially when managing remote sessions or switching between multiple tasks in a terminal environment.
 
-- **Çoklu Pencereler:** tmux, tek bir terminal penceresi içinde birden çok pencere açmanıza olanak tanır. Bu, lokal makinenizde olduğu gibi birden fazla terminal sekmesi açamayacağınız bir uzak sunucuda çalışırken özellikle faydalıdır.
-- **Sessions and Detaching:** Bir tmux oturumundan ayrılabilir ve onu arka planda çalışır durumda bırakabilirsiniz. Bu, bir tmux oturumu içinde uzun süreli bir işlem başlatabilir, ondan ayrılabilir ve sonra, farklı bir bilgisayardan bile, daha sonra yeniden bağlanabilirsiniz. Bu, uzun süren görevler için uzak sunucularda kapanmayan bir oturum gibi değerlidir.
-- **Persistent Sessions:** Bir sunucudan bağlantınız kesilirse (SSH bağlantısını kaybetmek gibi), tmux oturumunuzu aktif tutar. Tekrardan bağlanabilir ve hiçbir şey kaybetmeden kaldığınız yerden devam edebilirsiniz.
-- **Split Panes:** tmux, terminal pencerenizi yatay ve dikey olarak birden fazla panele bölmektedir. Bu, birkaç komutun çıktısını aynı anda görebilmeniz, izleme, düzenleme veya birden fazla komut satırı uygulamasını yan yana çalıştırmanız için harikadır.
+- **Multiple Windows:** tmux allows you to open multiple windows within a single terminal window. This is especially useful when working on a remote server where you can't open multiple terminal tabs like you would on your local machine.
+- **Sessions and Detaching:** You can detach from a tmux session and leave it running in the background. This means you can start a long-running process within a tmux session, detach from it, and then reattach later, even from a different computer. This is invaluable for maintaining persistent sessions on remote servers for long-running tasks.
+- **Persistent Sessions:** If your connection to a server is lost (like losing an SSH connection), tmux keeps your session active. You can reconnect and continue exactly where you left off without losing anything.
+- **Split Panes:** tmux divides your terminal window into multiple panes horizontally and vertically. This is great for viewing the output of several commands simultaneously, monitoring, editing, or running multiple command-line applications side by side.
 
-## tmux kurulumu
+## Installing tmux
 
 _Source: [https://github.com/tmux/tmux/wiki/Installing](https://github.com/tmux/tmux/wiki/Installing)_
 
@@ -33,55 +33,55 @@ _Source: [https://github.com/tmux/tmux/wiki/Installing](https://github.com/tmux/
     ║ openSUSE               ║ zypper install tmux ║
     ╚════════════════════════╩═════════════════════╝
 
-## tmux’a başlarken
+## Getting started with tmux
 
-tmux kullanmaya başlamak için terminalinizde tmux yazın. Bu komut, bir tmux sunucusu başlatır ve varsayılan bir oturum oluşturur (number 0)
+To start using tmux, type tmux in your terminal. This command starts a tmux server and creates a default session (number 0).
 
     tmux
 
 ![](https://cdn-images-1.medium.com/max/3176/0*nPkiznvGZTispU-K.png)
 
-Bir tmux oturumundan ayrılmak için ctrl+b ardından d (detach) tuşlarına basın. Tmux, “prefix” kombinasyonuna basılarak tetiklenen bir dizi tuş keybindingleri (klavye kısayolları) kullanır. Varsayılan olarak, prefix Ctrl+B dir. Daha sonra, mevcut oturumdan ayrılmak için D (detach) tuşuna basın.
+To detach from a tmux session, press Ctrl+B followed by D (detach). tmux uses a series of key bindings (keyboard shortcuts) that are triggered by pressing a "prefix" combination. By default, the prefix is Ctrl+B. Then, press D (detach) to detach from the current session.
 
     ~ tmux ls # 0: 1 windows (created Thu Nov 30 20:16:45 2023)
 
 ![](https://cdn-images-1.medium.com/max/3176/0*jNjXSqK4_R2JJ7uR.png)
 
-Aşağıdaki komut ile birlikte hali hazırda açmış olduğunuz bir session’ı yeniden adlandırabilirsiniz.
+You can rename an already opened session using the following command:
 
     # tmux rename -t <target_session> <new_name>
     ~ tmux rename -t 0 cobanov
 
-Bu noktada SSH bağlantınızı kesebilirsiniz yine de komut çalışmaya devam edecektir. İstediğinize mevcut tmux oturumuna yeniden bağlanarak kaldığınız yerden devam edebilirsiniz:
+At this point, you can disconnect your SSH connection and the command will continue running. You can reconnect to the existing tmux session whenever you want and continue where you left off:
 
     # tmux a -t <session_name>
     ~ tmux attach -t cobanov
 
-AYCS, her sey oldugu yerinde devam ediyor.
+Voilà! Everything continues exactly where it was.
 
-## Ekranların Yönetimi
+## Managing Screens
 
-Bir masaüstü ortamında nasıl pencereleriniz varsa Tmux’ta panelleriniz vardır. Aynı pencereler gibi, bu paneller de birden fazla uygulamayla etkileşimde bulunmanızı sağlar ve benzer şekilde açılabilir, kapatılabilir, yeniden boyutlandırılabilir ve taşınabilir.
+Just as you have windows in a desktop environment, you have panes in tmux. Like windows, these panes allow you to interact with multiple applications and can similarly be opened, closed, resized, and moved.
 
-Standart bir masaüstün ortamından farklı olarak, bu paneller tüm terminale döşenmiştir ve çoğunlukla tmux kısayolları ile yönetilir. _(fare işlevselliği eklenebilir olsa da)._ Yeni bir panel oluşturmak için ekranı yatay veya dikey olarak bölersiniz.
+Unlike a standard desktop environment, these panes are tiled across the entire terminal and are mostly managed through tmux shortcuts _(although mouse functionality can be added)._ To create a new pane, you split the screen either horizontally or vertically.
 
-## Dikey Ekran Bölme
+## Vertical Screen Split
 
-    ctrl+b %
+    Ctrl+B %
 
 ![](https://cdn-images-1.medium.com/max/3176/0*bq_d58tUTA54L-1v.png)
 
-## Yatay Ekran Bölme
+## Horizontal Screen Split
 
-    ctrl+b "
+    Ctrl+B "
 
 ![](https://cdn-images-1.medium.com/max/3176/0*0vmRK4OB6FIUNT2M.png)
 
-## Ekranlar arası geçiş
+## Switching Between Screens
 
-    ctrl+b [arrow key]
+    Ctrl+B [arrow key]
 
-tmux’ta tüm kısayol tuşlarını görmek için basitçe bind-key ? komutunu kullanın, benim durumumda bu CTRL-B ? olacaktır.
+To see all the shortcut keys in tmux, simply use the bind-key ? command, which in my case would be Ctrl+B ?.
 
 ## Further Reading & Sources
 
