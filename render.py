@@ -4,6 +4,7 @@ import shutil
 import markdown2
 import yaml
 from datetime import datetime
+import re
 
 # -------- Configuration --------
 BASE_DIR = Path(__file__).parent
@@ -63,6 +64,29 @@ def populate_template(content: str, title: str, date: str) -> str:
     )
 
 
+def extract_date_from_content(text: str, fallback_path: Path) -> str:
+    """Extract date from markdown content in YYYY-MM-DD format, fallback to file modification time."""
+    lines = text.splitlines()
+
+    # Look for YYYY-MM-DD pattern in the first few lines
+    date_pattern = r"^\s*(\d{4}-\d{2}-\d{2})\s*$"
+
+    for line in lines[:5]:  # Check first 5 lines
+        match = re.match(date_pattern, line.strip())
+        if match:
+            date_str = match.group(1)
+            try:
+                # Validate the date format
+                datetime.strptime(date_str, "%Y-%m-%d")
+                return date_str
+            except ValueError:
+                # If parsing fails, continue looking
+                continue
+
+    # Fallback to file modification time
+    return datetime.fromtimestamp(fallback_path.stat().st_mtime).strftime("%Y-%m-%d")
+
+
 def generate_pages(src_dir: Path, out_dir: Path):
     """Build HTML pages from markdown in src_dir, returning metadata."""
     pages = []
@@ -70,8 +94,10 @@ def generate_pages(src_dir: Path, out_dir: Path):
 
     for md_path in src_dir.glob("*.md"):
         slug = md_path.stem
-        date_str = datetime.fromtimestamp(md_path.stat().st_mtime).strftime("%Y-%m-%d")
         text = md_path.read_text(encoding="utf-8")
+
+        # Extract date from content
+        date_str = extract_date_from_content(text, md_path)
 
         # Extract title from the first markdown heading (first line starting with #)
         title = None
