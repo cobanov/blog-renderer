@@ -1,0 +1,10 @@
+[project]
+name = "blog-renderer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "markdown2>=2.5.3",
+    "pyyaml>=6.0.2",
+]
