@@ -64,27 +64,33 @@ def populate_template(content: str, title: str, date: str) -> str:
     )
 
 
-def extract_date_from_content(text: str, fallback_path: Path) -> str:
-    """Extract date from markdown content in YYYY-MM-DD format, fallback to file modification time."""
+def extract_date_from_content(text: str, fallback_path: Path) -> tuple[str, str]:
+    """Extract date from markdown content in YYYY-MM-DD format and return cleaned content."""
     lines = text.splitlines()
 
     # Look for YYYY-MM-DD pattern in the first few lines
     date_pattern = r"^\s*(\d{4}-\d{2}-\d{2})\s*$"
 
-    for line in lines[:5]:  # Check first 5 lines
+    for i, line in enumerate(lines[:5]):  # Check first 5 lines
         match = re.match(date_pattern, line.strip())
         if match:
             date_str = match.group(1)
             try:
                 # Validate the date format
                 datetime.strptime(date_str, "%Y-%m-%d")
-                return date_str
+                # Remove the date line from content
+                cleaned_lines = lines[:i] + lines[i + 1 :]
+                cleaned_content = "\n".join(cleaned_lines).strip()
+                return date_str, cleaned_content
             except ValueError:
                 # If parsing fails, continue looking
                 continue
 
-    # Fallback to file modification time
-    return datetime.fromtimestamp(fallback_path.stat().st_mtime).strftime("%Y-%m-%d")
+    # Fallback to file modification time, return original content
+    fallback_date = datetime.fromtimestamp(fallback_path.stat().st_mtime).strftime(
+        "%Y-%m-%d"
+    )
+    return fallback_date, text
 
 
 def generate_pages(src_dir: Path, out_dir: Path):
@@ -96,12 +102,12 @@ def generate_pages(src_dir: Path, out_dir: Path):
         slug = md_path.stem
         text = md_path.read_text(encoding="utf-8")
 
-        # Extract date from content
-        date_str = extract_date_from_content(text, md_path)
+        # Extract date from content and get cleaned content
+        date_str, cleaned_text = extract_date_from_content(text, md_path)
 
         # Extract title from the first markdown heading (first line starting with #)
         title = None
-        for line in text.splitlines():
+        for line in cleaned_text.splitlines():
             stripped = line.strip()
             if stripped.startswith("#"):
                 title = stripped.lstrip("#").strip()
@@ -110,7 +116,7 @@ def generate_pages(src_dir: Path, out_dir: Path):
             # Fallback to slug-based title
             title = slug.replace("-", " ").replace("_", " ").title()
 
-        body = markdown2.markdown(text, extras=MD_EXTRAS)
+        body = markdown2.markdown(cleaned_text, extras=MD_EXTRAS)
         html = populate_template(body, title, date_str)
 
         out_file = out_dir / f"{slug}.html"
@@ -157,12 +163,6 @@ def build_index(pages, blog, projects):
     segments = [home_body, "<h2>Blog Posts</h2>", "<ul>"]
 
     for p in blog:
-        segments.append(
-            f'<li><a href="{p["filename"]}">{p["title"]}</a> <small>({p["date"]})</small></li>'
-        )
-    segments += ["</ul>", "<h2>Projects</h2>", "<ul>"]
-
-    for p in projects:
         segments.append(
             f'<li><a href="{p["filename"]}">{p["title"]}</a> <small>({p["date"]})</small></li>'
         )
