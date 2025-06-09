@@ -2,12 +2,6 @@
 
 # Generative AI Art
 
-Author: Mert Cobanov
-
----
-
-## Generative AI Art
-
 Generative artificial intelligence art has undoubtedly become one of the most fascinating topics of the past five years, emerging as the most significant technology of 2023. While it has divided AI developers and conservative artists into two opposing camps worldwide, it has forced companies and governments to reach consensus on new regulations. End users struggle to distinguish between what's created with AI and what are actual images. While part of society feels unsettled by this rapidly advancing technology, others quickly adapt and integrate it into their lives. On our social media accounts, we've created selfies reminiscent of works by famous 16th-century artists like Jacques-Louis David, swapped our faces with those of celebrities, or transformed ourselves into cartoon characters. In essence, we've become entities that exist simultaneously in both real and virtual worlds, today and in future periods.
 
 ![image](https://cdn-images-1.medium.com/max/800/1*ZA-dye1xYL2ZabBmkfs2wQ.png)
