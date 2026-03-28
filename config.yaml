@@ -4,6 +4,12 @@ blog_dir: blog
 output_dir: static_website
 template: template.html
 
+site:
+  base_url: https://blog.cobanov.dev
+  title: cobanov
+  author: Mert Cobanov
+  twitter: "@mertcobanov"
+
 assets:
   - styles.css
   - main.js

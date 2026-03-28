@@ -19,8 +19,26 @@
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ title }} - cobanov</title>
+    <title>{{ title }}</title>
     <meta name="description" content="{{ description }}" />
+    <link rel="canonical" href="{{ canonical_url }}" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="{{ og_type }}" />
+    <meta property="og:title" content="{{ og_title }}" />
+    <meta property="og:description" content="{{ description }}" />
+    <meta property="og:url" content="{{ canonical_url }}" />
+    <meta property="og:site_name" content="cobanov" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@mertcobanov" />
+    <meta name="twitter:title" content="{{ og_title }}" />
+    <meta name="twitter:description" content="{{ description }}" />
+
+    <!-- Structured Data -->
+    {{ json_ld }}
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -82,7 +100,7 @@
       </div>
     </header>
     <main>
-      <div class="post-date">{{ date }}</div>
+      <time class="post-date" datetime="{{ date }}">{{ date }}</time>
       {{ content }}
     </main>
     <footer>
