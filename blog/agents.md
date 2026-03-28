@@ -1,6 +1,6 @@
 # From latent spaces to JWTs: how agents taught me backend
 
-![corals](https://raw.githubusercontent.com/cobanov/blog-renderer/refs/heads/main/assets/corals.png)
+![corals](https://raw.githubusercontent.com/cobanov/blog-renderer/refs/heads/main/assets/corals.jpeg)
 
 > I wrote code every day for years and somehow felt like I wasn't really writing code. Let me explain.
 
@@ -14,19 +14,17 @@ A data scientist works differently from a software engineer. Yes, you use a prog
 
 In the latest phase of my career, going deep on diffusion models, I found myself working with far more complex codebases than typical data science workflows demand. I was writing code rooted in mathematical optimization, computing algebra in latent spaces, working with neural network architectures at a level that required almost software engineering foundations. It was exciting work.
 
-But here's the tension: in data science and deep learning, you only ever brush up against other engineering disciplines. At best you do some API consuming, data scraping, maybe a bit of Docker. Authentication, object-oriented design, microservices, web frameworks, REST APIs, databases beyond writing queries: none of that is your priority. Your depth goes into the mathematical side and state-of-the-art deep learning model architectures, because those fields alone are deep enough to spend a career in.
+**But here's the tension:** in data science and deep learning, you only ever brush up against other engineering disciplines. At best you do some API consuming, data scraping, maybe a bit of Docker. Authentication, object-oriented design, microservices, web frameworks, REST APIs, databases beyond writing queries: none of that is your priority. Your depth goes into the mathematical side and state-of-the-art deep learning model architectures, because those fields alone are deep enough to spend a career in.
 
 > I was deepening on the math side while remaining shallow on the engineering side. That's what I mean by writing code every day and feeling like I wasn't really writing code.
 
-Then I found my way out: AI agents.
-
----
+## Then I found my way out: AI agents
 
 I asked my manager if I could drop diffusion models entirely. All I wanted was to build agents. It was the right opportunity to learn the engineering fundamentals I'd been missing. Building agents would force me to ship a real product and push me into backend territory.
 
 For those unfamiliar: agents are semi-autonomous programs that use LLMs to perform tool calling. You define a set of capabilities as functions, and the agent translates natural language into sequences of those function calls. They query databases, search the web, read documents, run calculations, really any function you can implement. Then they fold the results back into their context and respond in natural language. Building an agent means building all of these systems yourself.
 
-<!-- image: a simple diagram showing the agent loop: user prompt → LLM → tool calls → results → response -->
+![corals](https://raw.githubusercontent.com/cobanov/blog-renderer/refs/heads/main/assets/agents.jpeg)
 
 What I didn't anticipate was how quickly agent development would expose every gap in my engineering knowledge. The ML parts were comfortable. Everything around them was not.
 
@@ -35,8 +33,6 @@ What I didn't anticipate was how quickly agent development would expose every ga
 **Then came async.** My agent needed to call multiple tools, some of them slow, and I couldn't have it blocking on each one sequentially. So I had to learn async/await patterns in Python, not the toy examples from tutorials, but real async database sessions, connection pooling, and handling concurrent tool executions without race conditions. FastAPI made the async-first approach natural, but that also meant every dependency I plugged in had to play nicely with async, and many didn't.
 
 Each of these problems cascaded into the next. Securing the API forced me to understand middleware. Middleware forced me to understand the request lifecycle. The request lifecycle forced me to understand how FastAPI's dependency system actually works. Seven months in, I can trace a request from ingress to database query to agent tool call and back, and I understand why every layer exists.
-
----
 
 ## The Pivot
 
