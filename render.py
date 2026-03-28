@@ -14,15 +14,12 @@ cfg_data = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
 template_path = BASE_DIR / cfg_data["template"]
 PAGES_SRC = BASE_DIR / cfg_data["pages_dir"]
 BLOG_SRC = BASE_DIR / cfg_data["blog_dir"]
-PROJ_SRC = BASE_DIR / cfg_data["projects_dir"]
 OUT_DIR = BASE_DIR / cfg_data["output_dir"]
 
 PAGES_OUT = OUT_DIR / Path(cfg_data["pages_dir"]).name
 BLOG_OUT = OUT_DIR / Path(cfg_data["blog_dir"]).name
-PROJ_OUT = OUT_DIR / Path(cfg_data["projects_dir"]).name
 INDEX_OUT = OUT_DIR / "index.html"
 BLOG_INDEX_OUT = BLOG_OUT / "index.html"
-PROJ_INDEX_OUT = PROJ_OUT / "index.html"
 
 ASSETS = [BASE_DIR / f for f in cfg_data.get("assets", [])]
 MD_EXTRAS = cfg_data.get("markdown_extras", [])
@@ -39,7 +36,7 @@ _raw_template = template_path.read_text(encoding="utf-8")
 
 def clean_output():
     """Remove old generated HTML files to prevent orphans."""
-    for d in (PAGES_OUT, BLOG_OUT, PROJ_OUT):
+    for d in (PAGES_OUT, BLOG_OUT):
         if d.exists():
             for f in d.glob("*.html"):
                 f.unlink()
@@ -50,7 +47,7 @@ def clean_output():
 
 def ensure_dirs():
     """Create output directories if they don't exist."""
-    for d in (OUT_DIR, PAGES_OUT, BLOG_OUT, PROJ_OUT):
+    for d in (OUT_DIR, PAGES_OUT, BLOG_OUT):
         d.mkdir(parents=True, exist_ok=True)
 
 
@@ -76,25 +73,20 @@ def extract_date_from_content(text: str, fallback_path: Path) -> tuple[str, str]
     """Extract date from markdown content in YYYY-MM-DD format and return cleaned content."""
     lines = text.splitlines()
 
-    # Look for YYYY-MM-DD pattern in the first few lines
     date_pattern = r"^\s*(\d{4}-\d{2}-\d{2})\s*$"
 
-    for i, line in enumerate(lines[:5]):  # Check first 5 lines
+    for i, line in enumerate(lines[:5]):
         match = re.match(date_pattern, line.strip())
         if match:
             date_str = match.group(1)
             try:
-                # Validate the date format
                 datetime.strptime(date_str, "%Y-%m-%d")
-                # Remove the date line from content
                 cleaned_lines = lines[:i] + lines[i + 1 :]
                 cleaned_content = "\n".join(cleaned_lines).strip()
                 return date_str, cleaned_content
             except ValueError:
-                # If parsing fails, continue looking
                 continue
 
-    # Fallback to file modification time, return original content
     fallback_date = datetime.fromtimestamp(fallback_path.stat().st_mtime).strftime(
         "%Y-%m-%d"
     )
@@ -117,7 +109,7 @@ def extract_description(text: str, max_length: int = 160) -> str:
 def generate_pages(src_dir: Path, out_dir: Path):
     """Build HTML pages from markdown in src_dir, returning metadata."""
     pages = []
-    section_name = out_dir.name  # e.g., 'blog'
+    section_name = out_dir.name
 
     for md_path in src_dir.glob("*.md"):
         slug = md_path.stem
@@ -173,13 +165,18 @@ def build_sub_index(pages, index_path: Path, section_title: str):
     logger.info(f"Generated sub-index for {section_title}: {index_path}")
 
 
-def build_index(pages, blog, projects):
-    """Compose the homepage with links using full URL."""
+def build_index(blog):
+    """Compose the homepage with blog links."""
     home_md = PAGES_SRC / "home.md"
     home_text = home_md.read_text(encoding="utf-8") if home_md.exists() else ""
     home_body = markdown2.markdown(home_text, extras=MD_EXTRAS) if home_text else "<h1>Welcome</h1>"
 
-    segments = [home_body, "<h2>Blog Posts</h2>", '<ul class="post-list">']
+    segments = [
+        '<div class="intro">', home_body, '</div>',
+        '<hr>',
+        '<h2 class="section-label">Writing</h2>',
+        '<ul class="post-list">',
+    ]
     for p in blog:
         segments.append(
             f'<li><a href="{p["filename"]}">{p["title"]}</a> <small>({p["date"]})</small></li>'
@@ -194,27 +191,24 @@ def build_index(pages, blog, projects):
     logger.info(f"Generated homepage: {INDEX_OUT}")
 
 
-def build_section(src: Path, out: Path, index: Path, name: str):
-    """Generalized builder for pages, blog, or projects sections."""
-    pages = generate_pages(src, out)
-    if index:
-        build_sub_index(pages, index, name)
-    return pages
-
-
 def build_site():
     """Orchestrate directories, assets, pages, and indices."""
     ensure_dirs()
     clean_output()
     copy_assets()
 
-    pages = build_section(PAGES_SRC, PAGES_OUT, None, "pages")
+    build_section(PAGES_SRC, PAGES_OUT, None, "pages")
     blog = build_section(BLOG_SRC, BLOG_OUT, BLOG_INDEX_OUT, cfg_data["blog_dir"])
-    projects = build_section(
-        PROJ_SRC, PROJ_OUT, PROJ_INDEX_OUT, cfg_data["projects_dir"]
-    )
 
-    build_index(pages, blog, projects)
+    build_index(blog)
+
+
+def build_section(src: Path, out: Path, index: Path, name: str):
+    """Generalized builder for pages or blog sections."""
+    pages = generate_pages(src, out)
+    if index:
+        build_sub_index(pages, index, name)
+    return pages
 
 
 if __name__ == "__main__":

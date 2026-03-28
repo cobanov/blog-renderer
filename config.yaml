@@ -1,7 +1,6 @@
 # config.yaml
 pages_dir: pages
 blog_dir: blog
-projects_dir: projects
 output_dir: static_website
 template: template.html
 
