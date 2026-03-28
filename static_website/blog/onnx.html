@@ -2,25 +2,46 @@
 <html lang="en" class="light-theme">
   <head>
     <script>
-      // Immediately set theme before anything else
-      document.documentElement.className =
-        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+      (function () {
+        var isDark = localStorage.getItem("theme") === "dark";
+        document.documentElement.className = isDark
+          ? "dark-theme"
+          : "light-theme";
+        document.addEventListener("DOMContentLoaded", function () {
+          var light = document.getElementById("hljs-light");
+          var dark = document.getElementById("hljs-dark");
+          if (light && dark) {
+            light.disabled = isDark;
+            dark.disabled = !isDark;
+          }
+        });
+      })();
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>What is ONNX? Why Should You Learn It?</title>
+    <title>What is ONNX? Why Should You Learn It? - cobanov</title>
+    <meta name="description" content="The most practical way to deploy deep learning models everywhere." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link
+      id="hljs-light"
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
     />
     <link
+      id="hljs-dark"
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+      disabled
     />
   </head>
 
@@ -105,6 +126,8 @@
 <p>Before diving into the details, let me show you an example to help you visualize this.</p>
 
 <h2>Possible Scenarios</h2>
+
+<h3>1. CoreML on iPhone</h3>
 
 <p>Let&#8217;s say you have a machine learning model that detects flower types from photos. You perform this task by uploading a photo from your computer and making predictions, using your classic x86 processor or Nvidia graphics card. However, when you want to do this on an iPhone 15 with an A16 Bionic chip, Apple will force you to use CoreML because you need to run this on the Neural Processing Unit (NPU), also known as the Apple Neural Engine.</p>
 
@@ -198,10 +221,10 @@ print("Model converted to ONNX and saved as:", onnx_model_path)
 <p>Additionally, there&#8217;s thread pooling support for distributed systems. These are features that can be useful when making larger-scale deployments. There&#8217;s really no simple way to explain these - they&#8217;re actually topics for entirely different blogs, but I&#8217;m leaving relevant links for those who are curious.</p>
 
 <ul>
-<li>Just-In-Time Compilation: https://www.freecodecamp.org/news/just-in-time-compilation-explained/</li>
-<li>Kernel Fusion: https://stackoverflow.com/questions/53305830/cuda-how-does-kernel-fusion-improve-performance-on-memory-bound-applications-on</li>
-<li>Subgraph Partitioning: https://en.wikipedia.org/wiki/Graph_partition</li>
-<li>Thread pooling: https://superfastpython.com/threadpool-python/</li>
+<li><a href="https://www.freecodecamp.org/news/just-in-time-compilation-explained/">Just-In-Time Compilation</a></li>
+<li><a href="https://stackoverflow.com/questions/53305830/cuda-how-does-kernel-fusion-improve-performance-on-memory-bound-applications-on">Kernel Fusion</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Graph_partition">Subgraph Partitioning</a></li>
+<li><a href="https://superfastpython.com/threadpool-python/">Thread pooling</a></li>
 </ul>
 
 <h2>ONNX Model Zoo</h2>
@@ -255,9 +278,7 @@ for i in top_indices:
     print(f"Class: {class_label}, Score: {class_score:.4f}")
 </code></pre>
 
-<pre><code># Output
-
-Class: American chameleon, anole, Anolis carolinensis, Score: 85.1076
+<pre><code>Class: American chameleon, anole, Anolis carolinensis, Score: 85.1076
 Class: green lizard, Lacerta viridis, Score: 92.0642
 Class: bullfrog, Rana catesbeiana, Score: 103.7489
 Class: tailed frog, bell toad, ribbed toad, tailed toad, Ascaphus trui, Score: 157.5779
@@ -279,19 +300,19 @@ Class: tree frog, tree-frog, Score: 186.0841
 <h2>References</h2>
 
 <ul>
-<li>https://learn.microsoft.com/en-us/azure/machine-learning/concept-onnx?view=azureml-api-2</li>
-<li>https://onnx.ai/supported-tools</li>
-<li>https://blog.roboflow.com/what-is-onnx/</li>
-<li>https://blog.roboflow.com/what-is-tensorrt/</li>
-<li>https://towardsdatascience.com/onnx-the-standard-for-interoperable-deep-learning-models-a47dfbdf9a09</li>
-<li>https://blog.paperspace.com/what-every-ml-ai-developer-should-know-about-onnx/</li>
-<li>https://www.linkedin.com/pulse/what-onnx-machine-learning-model-why-should-you-care-bhattiprolu/</li>
-<li>https://en.wikipedia.org/wiki/Open<em>Neural</em>Network_Exchange</li>
-<li>https://medium.com/geekculture/onnx-in-a-nutshell-4b584cbae7f5</li>
-<li>https://onnx.ai/sklearn-onnx/introduction.html</li>
-<li>https://pytorch.org/tutorials/advanced/super<em>resolution</em>with_onnxruntime.html</li>
-<li>https://viso.ai/edge-ai/tensorflow-lite/</li>
-<li>https://towardsdatascience.com/7-lessons-ive-learnt-from-deploying-machine-learning-models-using-onnx-3e993da4028c</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/machine-learning/concept-onnx?view=azureml-api-2">Azure Machine Learning - ONNX</a></li>
+<li><a href="https://onnx.ai/supported-tools">ONNX Supported Tools</a></li>
+<li><a href="https://blog.roboflow.com/what-is-onnx/">What is ONNX? - Roboflow</a></li>
+<li><a href="https://blog.roboflow.com/what-is-tensorrt/">What is TensorRT? - Roboflow</a></li>
+<li><a href="https://towardsdatascience.com/onnx-the-standard-for-interoperable-deep-learning-models-a47dfbdf9a09">ONNX: The Standard for Interoperable Deep Learning Models</a></li>
+<li><a href="https://blog.paperspace.com/what-every-ml-ai-developer-should-know-about-onnx/">What Every ML/AI Developer Should Know About ONNX</a></li>
+<li><a href="https://www.linkedin.com/pulse/what-onnx-machine-learning-model-why-should-you-care-bhattiprolu/">What is ONNX? - LinkedIn</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Open_Neural_Network_Exchange">Open Neural Network Exchange - Wikipedia</a></li>
+<li><a href="https://medium.com/geekculture/onnx-in-a-nutshell-4b584cbae7f5">ONNX in a Nutshell</a></li>
+<li><a href="https://onnx.ai/sklearn-onnx/introduction.html">sklearn-onnx Introduction</a></li>
+<li><a href="https://pytorch.org/tutorials/advanced/super_resolution_with_onnxruntime.html">PyTorch ONNX Runtime Tutorial</a></li>
+<li><a href="https://viso.ai/edge-ai/tensorflow-lite/">TensorFlow Lite - Viso.ai</a></li>
+<li><a href="https://towardsdatascience.com/7-lessons-ive-learnt-from-deploying-machine-learning-models-using-onnx-3e993da4028c">7 Lessons from Deploying ML Models Using ONNX</a></li>
 </ul>
 
 <hr />
@@ -300,11 +321,15 @@ Class: tree frog, tree-frog, Score: 186.0841
 
     </main>
     <footer>
-      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+      <span>&copy; 2026 Mert Cobanov. All rights reserved.</span>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
     <script src="/main.js"></script>
   </body>
 </html>

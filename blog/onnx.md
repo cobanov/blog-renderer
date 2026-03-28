@@ -43,6 +43,8 @@ Before diving into the details, let me show you an example to help you visualize
 
 ## Possible Scenarios
 
+### 1. CoreML on iPhone
+
 Let's say you have a machine learning model that detects flower types from photos. You perform this task by uploading a photo from your computer and making predictions, using your classic x86 processor or Nvidia graphics card. However, when you want to do this on an iPhone 15 with an A16 Bionic chip, Apple will force you to use CoreML because you need to run this on the Neural Processing Unit (NPU), also known as the Apple Neural Engine.
 
 You can quickly convert your machine learning model to a CoreML model using ONNX. You'll use the `tf2onnx` library to convert your Keras model to ONNX, and then use the `onnx-coreml` library to convert ONNX to a Core ML model. You're ready to deploy in CoreML.
@@ -137,10 +139,10 @@ Some of these techniques include JIT (Just-In-Time Compilation), kernel fusion, 
 
 Additionally, there's thread pooling support for distributed systems. These are features that can be useful when making larger-scale deployments. There's really no simple way to explain these - they're actually topics for entirely different blogs, but I'm leaving relevant links for those who are curious.
 
-- Just-In-Time Compilation: https://www.freecodecamp.org/news/just-in-time-compilation-explained/
-- Kernel Fusion: https://stackoverflow.com/questions/53305830/cuda-how-does-kernel-fusion-improve-performance-on-memory-bound-applications-on
-- Subgraph Partitioning: https://en.wikipedia.org/wiki/Graph_partition
-- Thread pooling: https://superfastpython.com/threadpool-python/
+- [Just-In-Time Compilation](https://www.freecodecamp.org/news/just-in-time-compilation-explained/)
+- [Kernel Fusion](https://stackoverflow.com/questions/53305830/cuda-how-does-kernel-fusion-improve-performance-on-memory-bound-applications-on)
+- [Subgraph Partitioning](https://en.wikipedia.org/wiki/Graph_partition)
+- [Thread pooling](https://superfastpython.com/threadpool-python/)
 
 ## ONNX Model Zoo
 
@@ -194,9 +196,7 @@ for i in top_indices:
     print(f"Class: {class_label}, Score: {class_score:.4f}")
 ```
 
-```yaml
-# Output
-
+```
 Class: American chameleon, anole, Anolis carolinensis, Score: 85.1076
 Class: green lizard, Lacerta viridis, Score: 92.0642
 Class: bullfrog, Rana catesbeiana, Score: 103.7489
@@ -216,19 +216,19 @@ _Mert Cobanov_
 
 ## References
 
-- https://learn.microsoft.com/en-us/azure/machine-learning/concept-onnx?view=azureml-api-2
-- https://onnx.ai/supported-tools
-- https://blog.roboflow.com/what-is-onnx/
-- https://blog.roboflow.com/what-is-tensorrt/
-- https://towardsdatascience.com/onnx-the-standard-for-interoperable-deep-learning-models-a47dfbdf9a09
-- https://blog.paperspace.com/what-every-ml-ai-developer-should-know-about-onnx/
-- https://www.linkedin.com/pulse/what-onnx-machine-learning-model-why-should-you-care-bhattiprolu/
-- https://en.wikipedia.org/wiki/Open_Neural_Network_Exchange
-- https://medium.com/geekculture/onnx-in-a-nutshell-4b584cbae7f5
-- https://onnx.ai/sklearn-onnx/introduction.html
-- https://pytorch.org/tutorials/advanced/super_resolution_with_onnxruntime.html
-- https://viso.ai/edge-ai/tensorflow-lite/
-- https://towardsdatascience.com/7-lessons-ive-learnt-from-deploying-machine-learning-models-using-onnx-3e993da4028c
+- [Azure Machine Learning - ONNX](https://learn.microsoft.com/en-us/azure/machine-learning/concept-onnx?view=azureml-api-2)
+- [ONNX Supported Tools](https://onnx.ai/supported-tools)
+- [What is ONNX? - Roboflow](https://blog.roboflow.com/what-is-onnx/)
+- [What is TensorRT? - Roboflow](https://blog.roboflow.com/what-is-tensorrt/)
+- [ONNX: The Standard for Interoperable Deep Learning Models](https://towardsdatascience.com/onnx-the-standard-for-interoperable-deep-learning-models-a47dfbdf9a09)
+- [What Every ML/AI Developer Should Know About ONNX](https://blog.paperspace.com/what-every-ml-ai-developer-should-know-about-onnx/)
+- [What is ONNX? - LinkedIn](https://www.linkedin.com/pulse/what-onnx-machine-learning-model-why-should-you-care-bhattiprolu/)
+- [Open Neural Network Exchange - Wikipedia](https://en.wikipedia.org/wiki/Open_Neural_Network_Exchange)
+- [ONNX in a Nutshell](https://medium.com/geekculture/onnx-in-a-nutshell-4b584cbae7f5)
+- [sklearn-onnx Introduction](https://onnx.ai/sklearn-onnx/introduction.html)
+- [PyTorch ONNX Runtime Tutorial](https://pytorch.org/tutorials/advanced/super_resolution_with_onnxruntime.html)
+- [TensorFlow Lite - Viso.ai](https://viso.ai/edge-ai/tensorflow-lite/)
+- [7 Lessons from Deploying ML Models Using ONNX](https://towardsdatascience.com/7-lessons-ive-learnt-from-deploying-machine-learning-models-using-onnx-3e993da4028c)
 
 ---
 

@@ -2,25 +2,46 @@
 <html lang="en" class="light-theme">
   <head>
     <script>
-      // Immediately set theme before anything else
-      document.documentElement.className =
-        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+      (function () {
+        var isDark = localStorage.getItem("theme") === "dark";
+        document.documentElement.className = isDark
+          ? "dark-theme"
+          : "light-theme";
+        document.addEventListener("DOMContentLoaded", function () {
+          var light = document.getElementById("hljs-light");
+          var dark = document.getElementById("hljs-dark");
+          if (light && dark) {
+            light.disabled = isDark;
+            dark.disabled = !isDark;
+          }
+        });
+      })();
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>Home - cobanov</title>
+    <meta name="description" content="Hello! I'm Mert Cobanov, an AI engineer building intelligent agents. My journey started in data science and computer vision, took me through diffusion models..." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link
+      id="hljs-light"
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
     />
     <link
+      id="hljs-dark"
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+      disabled
     />
   </head>
 
@@ -59,10 +80,12 @@
       <div class="post-date"></div>
       <h1>Welcome to My Blog</h1>
 
-<p>Hello! I&#8217;m <strong>Mert Cobanov</strong>, a data scientist passionate about leveraging data to solve complex problems. This blog is where I share my thoughts, experiences, and insights about data science, machine learning, and technology.</p>
+<p>Hello! I&#8217;m <strong>Mert Cobanov</strong>, an AI engineer building intelligent agents. My journey started in data science and computer vision, took me through diffusion models and generative AI, and eventually led me to where I am now developing AI agents and the backend systems that power them. This blog is where I share my thoughts, experiences, and insights about AI engineering, agents, and technology.</p>
 
 <h2>Blog Posts</h2>
-<ul>
+<ul class="post-list">
+<li><a href="blog/agents.html">From latent spaces to JWTs: how agents taught me backend</a> <small>(2026-03-28)</small></li>
+<li><a href="blog/agents2.html">From latent spaces to JWTs: how agents taught me backend</a> <small>(2026-03-28)</small></li>
 <li><a href="blog/teslamcp.html">How I Connected My Tesla to Claude</a> <small>(2025-06-10)</small></li>
 <li><a href="blog/genai_revolution.html">The Generative AI Revolution I Witnessed</a> <small>(2025-06-06)</small></li>
 <li><a href="blog/piracy.html">Piracy</a> <small>(2024-09-11)</small></li>
@@ -73,11 +96,15 @@
 </ul>
     </main>
     <footer>
-      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+      <span>&copy; 2026 Mert Cobanov. All rights reserved.</span>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
     <script src="/main.js"></script>
   </body>
 </html>

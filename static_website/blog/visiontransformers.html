@@ -2,25 +2,46 @@
 <html lang="en" class="light-theme">
   <head>
     <script>
-      // Immediately set theme before anything else
-      document.documentElement.className =
-        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+      (function () {
+        var isDark = localStorage.getItem("theme") === "dark";
+        document.documentElement.className = isDark
+          ? "dark-theme"
+          : "light-theme";
+        document.addEventListener("DOMContentLoaded", function () {
+          var light = document.getElementById("hljs-light");
+          var dark = document.getElementById("hljs-dark");
+          if (light && dark) {
+            light.disabled = isDark;
+            dark.disabled = !isDark;
+          }
+        });
+      })();
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>What are Vision Transformers?</title>
+    <title>What are Vision Transformers? - cobanov</title>
+    <meta name="description" content="2022 became the year of artificial intelligence, with incredible developments in AI art, natural language processing, computer vision, and audio technologies..." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link
+      id="hljs-light"
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
     />
     <link
+      id="hljs-dark"
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+      disabled
     />
   </head>
 
@@ -406,11 +427,11 @@ sunglass           0.020680639892816544
 <h2>Sources</h2>
 
 <ul>
-<li>https://www.learnpytorch.io/08<em>pytorch</em>paper_replicating/#3-replicating-the-vit-paper-an-overview</li>
-<li>https://theaisummer.com/vision-transformer</li>
-<li>https://medium.com/swlh/visual-transformers-a-new-computer-vision-paradigm-aa78c2a2ccf2</li>
-<li>https://viso.ai/deep-learning/vision-transformer-vit/</li>
-<li>https://arxiv.org/abs/2106.01548</li>
+<li><a href="https://www.learnpytorch.io/08_pytorch_paper_replicating/#3-replicating-the-vit-paper-an-overview">Learn PyTorch - Replicating the ViT Paper</a></li>
+<li><a href="https://theaisummer.com/vision-transformer">Vision Transformer - The AI Summer</a></li>
+<li><a href="https://medium.com/swlh/visual-transformers-a-new-computer-vision-paradigm-aa78c2a2ccf2">Visual Transformers: A New Computer Vision Paradigm</a></li>
+<li><a href="https://viso.ai/deep-learning/vision-transformer-vit/">Vision Transformer (ViT) - Viso.ai</a></li>
+<li><a href="https://arxiv.org/abs/2106.01548">When Vision Transformers Outperform ResNets</a></li>
 </ul>
 
 <hr />
@@ -419,11 +440,15 @@ sunglass           0.020680639892816544
 
     </main>
     <footer>
-      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+      <span>&copy; 2026 Mert Cobanov. All rights reserved.</span>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
     <script src="/main.js"></script>
   </body>
 </html>

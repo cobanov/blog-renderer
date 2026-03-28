@@ -37,6 +37,17 @@ _raw_template = template_path.read_text(encoding="utf-8")
 # -------- Helpers --------
 
 
+def clean_output():
+    """Remove old generated HTML files to prevent orphans."""
+    for d in (PAGES_OUT, BLOG_OUT, PROJ_OUT):
+        if d.exists():
+            for f in d.glob("*.html"):
+                f.unlink()
+    if INDEX_OUT.exists():
+        INDEX_OUT.unlink()
+    logger.info("Cleaned old output files")
+
+
 def ensure_dirs():
     """Create output directories if they don't exist."""
     for d in (OUT_DIR, PAGES_OUT, BLOG_OUT, PROJ_OUT):
@@ -50,17 +61,14 @@ def copy_assets():
     logger.info(f"Assets copied to {OUT_DIR}")
 
 
-def render_markdown(md_path: Path) -> str:
-    """Convert a Markdown file to HTML."""
-    return markdown2.markdown(md_path.read_text(encoding="utf-8"), extras=MD_EXTRAS)
-
-
-def populate_template(content: str, title: str, date: str) -> str:
-    """Inject content, title, and date into the HTML template."""
+def populate_template(content: str, title: str, date: str, description: str = "") -> str:
+    """Inject content, title, date, description, and year into the HTML template."""
     return (
         _raw_template.replace("{{ content }}", content)
         .replace("{{ title }}", title)
         .replace("{{ date }}", date)
+        .replace("{{ description }}", description)
+        .replace("{{ year }}", str(datetime.now().year))
     )
 
 
@@ -93,6 +101,19 @@ def extract_date_from_content(text: str, fallback_path: Path) -> tuple[str, str]
     return fallback_date, text
 
 
+def extract_description(text: str, max_length: int = 160) -> str:
+    """Extract a plain-text description from markdown content for meta tags."""
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or stripped.startswith("!"):
+            continue
+        clean = re.sub(r"[*_`\[\]()]", "", stripped)
+        if len(clean) > max_length:
+            return clean[: max_length - 3] + "..."
+        return clean
+    return ""
+
+
 def generate_pages(src_dir: Path, out_dir: Path):
     """Build HTML pages from markdown in src_dir, returning metadata."""
     pages = []
@@ -102,10 +123,8 @@ def generate_pages(src_dir: Path, out_dir: Path):
         slug = md_path.stem
         text = md_path.read_text(encoding="utf-8")
 
-        # Extract date from content and get cleaned content
         date_str, cleaned_text = extract_date_from_content(text, md_path)
 
-        # Extract title from the first markdown heading (first line starting with #)
         title = None
         for line in cleaned_text.splitlines():
             stripped = line.strip()
@@ -113,16 +132,15 @@ def generate_pages(src_dir: Path, out_dir: Path):
                 title = stripped.lstrip("#").strip()
                 break
         if not title:
-            # Fallback to slug-based title
             title = slug.replace("-", " ").replace("_", " ").title()
 
+        description = extract_description(cleaned_text)
         body = markdown2.markdown(cleaned_text, extras=MD_EXTRAS)
-        html = populate_template(body, title, date_str)
+        html = populate_template(body, title, date_str, description)
 
         out_file = out_dir / f"{slug}.html"
         out_file.write_text(html, encoding="utf-8")
 
-        # URL for homepage (with section prefix) and for sub-index (basename)
         basename = out_file.name
         full_url = f"{section_name}/{basename}"
 
@@ -142,7 +160,7 @@ def generate_pages(src_dir: Path, out_dir: Path):
 
 def build_sub_index(pages, index_path: Path, section_title: str):
     """Generate a sub-index in its folder, linking by basename."""
-    items = [f"<h1>{section_title.title()}</h1>", "<ul>"]
+    items = [f"<h1>{section_title.title()}</h1>", '<ul class="post-list">']
 
     for p in pages:
         items.append(
@@ -158,18 +176,19 @@ def build_sub_index(pages, index_path: Path, section_title: str):
 def build_index(pages, blog, projects):
     """Compose the homepage with links using full URL."""
     home_md = PAGES_SRC / "home.md"
-    home_body = render_markdown(home_md) if home_md.exists() else "<h1>Welcome</h1>"
+    home_text = home_md.read_text(encoding="utf-8") if home_md.exists() else ""
+    home_body = markdown2.markdown(home_text, extras=MD_EXTRAS) if home_text else "<h1>Welcome</h1>"
 
-    segments = [home_body, "<h2>Blog Posts</h2>", "<ul>"]
-
+    segments = [home_body, "<h2>Blog Posts</h2>", '<ul class="post-list">']
     for p in blog:
         segments.append(
             f'<li><a href="{p["filename"]}">{p["title"]}</a> <small>({p["date"]})</small></li>'
         )
     segments.append("</ul>")
 
+    description = extract_description(home_text) if home_text else "Mert Cobanov's personal blog"
     INDEX_OUT.write_text(
-        populate_template("\n".join(segments), "Home", ""),
+        populate_template("\n".join(segments), "Home", "", description),
         encoding="utf-8",
     )
     logger.info(f"Generated homepage: {INDEX_OUT}")
@@ -186,6 +205,7 @@ def build_section(src: Path, out: Path, index: Path, name: str):
 def build_site():
     """Orchestrate directories, assets, pages, and indices."""
     ensure_dirs()
+    clean_output()
     copy_assets()
 
     pages = build_section(PAGES_SRC, PAGES_OUT, None, "pages")

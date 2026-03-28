@@ -322,11 +322,11 @@ sunglass           0.020680639892816544
 
 ## Sources
 
-- https://www.learnpytorch.io/08_pytorch_paper_replicating/#3-replicating-the-vit-paper-an-overview
-- https://theaisummer.com/vision-transformer
-- https://medium.com/swlh/visual-transformers-a-new-computer-vision-paradigm-aa78c2a2ccf2
-- https://viso.ai/deep-learning/vision-transformer-vit/
-- https://arxiv.org/abs/2106.01548
+- [Learn PyTorch - Replicating the ViT Paper](https://www.learnpytorch.io/08_pytorch_paper_replicating/#3-replicating-the-vit-paper-an-overview)
+- [Vision Transformer - The AI Summer](https://theaisummer.com/vision-transformer)
+- [Visual Transformers: A New Computer Vision Paradigm](https://medium.com/swlh/visual-transformers-a-new-computer-vision-paradigm-aa78c2a2ccf2)
+- [Vision Transformer (ViT) - Viso.ai](https://viso.ai/deep-learning/vision-transformer-vit/)
+- [When Vision Transformers Outperform ResNets](https://arxiv.org/abs/2106.01548)
 
 ---
 

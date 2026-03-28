@@ -2,25 +2,46 @@
 <html lang="en" class="light-theme">
   <head>
     <script>
-      // Immediately set theme before anything else
-      document.documentElement.className =
-        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+      (function () {
+        var isDark = localStorage.getItem("theme") === "dark";
+        document.documentElement.className = isDark
+          ? "dark-theme"
+          : "light-theme";
+        document.addEventListener("DOMContentLoaded", function () {
+          var light = document.getElementById("hljs-light");
+          var dark = document.getElementById("hljs-dark");
+          if (light && dark) {
+            light.disabled = isDark;
+            dark.disabled = !isDark;
+          }
+        });
+      })();
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Generative AI Revolution I Witnessed</title>
+    <title>The Generative AI Revolution I Witnessed - cobanov</title>
+    <meta name="description" content="I've been in the generative AI space since its very first heartbeats. Throughout this journey, I've had the chance to try every technology, every innovation,..." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link
+      id="hljs-light"
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
     />
     <link
+      id="hljs-dark"
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+      disabled
     />
   </head>
 
@@ -65,7 +86,7 @@
 
 <p>In the early days, it was criticized for <strong><em>inadequate and random outputs</em></strong> (language models included). Then came the critiques that it would <strong>never reach human-level performance</strong>. During the period when it couldn&#8217;t produce sufficiently realistic outputs but succeeded in more abstract arts, there were small pushbacks mixed with mild fear, claiming <em>"this isn&#8217;t real art"</em> - it was even dismissed. When realism improved, everyone was impressed, but simultaneously there were attempts to build public opinion that <strong>"we should stop AI."</strong></p>
 
-<p><img src="https://raw.githubusercontent.com/cobanov/blog-renderer/refs/heads/main/assets/TimeToDisco(0)_14.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/cobanov/blog-renderer/refs/heads/main/assets/TimeToDisco(0)_14.png" alt="Disco Diffusion generated artwork" /></p>
 
 <h2>Today: Ubiquitous and Indispensable</h2>
 
@@ -103,11 +124,15 @@
 
     </main>
     <footer>
-      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+      <span>&copy; 2026 Mert Cobanov. All rights reserved.</span>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
     <script src="/main.js"></script>
   </body>
 </html>

@@ -2,25 +2,46 @@
 <html lang="en" class="light-theme">
   <head>
     <script>
-      // Immediately set theme before anything else
-      document.documentElement.className =
-        localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+      (function () {
+        var isDark = localStorage.getItem("theme") === "dark";
+        document.documentElement.className = isDark
+          ? "dark-theme"
+          : "light-theme";
+        document.addEventListener("DOMContentLoaded", function () {
+          var light = document.getElementById("hljs-light");
+          var dark = document.getElementById("hljs-dark");
+          if (light && dark) {
+            light.disabled = isDark;
+            dark.disabled = !isDark;
+          }
+        });
+      })();
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to TMUX</title>
+    <title>Introduction to TMUX - cobanov</title>
+    <meta name="description" content="tmux is a terminal multiplexer that we use especially when managing long-running or multiple terminal sessions. This tool allows users to manage multiple ter..." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link
+      id="hljs-light"
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
     />
     <link
+      id="hljs-dark"
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+      disabled
     />
   </head>
 
@@ -102,14 +123,14 @@
 <pre><code>tmux
 </code></pre>
 
-<p><img src="https://cdn-images-1.medium.com/max/3176/0*nPkiznvGZTispU-K.png" alt="" /></p>
+<p><img src="https://cdn-images-1.medium.com/max/3176/0*nPkiznvGZTispU-K.png" alt="tmux default session" /></p>
 
 <p>To detach from a tmux session, press Ctrl+B followed by D (detach). tmux uses a series of key bindings (keyboard shortcuts) that are triggered by pressing a &#8220;prefix&#8221; combination. By default, the prefix is Ctrl+B. Then, press D (detach) to detach from the current session.</p>
 
 <pre><code>~ tmux ls # 0: 1 windows (created Thu Nov 30 20:16:45 2023)
 </code></pre>
 
-<p><img src="https://cdn-images-1.medium.com/max/3176/0*jNjXSqK4_R2JJ7uR.png" alt="" /></p>
+<p><img src="https://cdn-images-1.medium.com/max/3176/0*jNjXSqK4_R2JJ7uR.png" alt="tmux session list" /></p>
 
 <p>You can rename an already opened session using the following command:</p>
 
@@ -136,14 +157,14 @@
 <pre><code>Ctrl+B %
 </code></pre>
 
-<p><img src="https://cdn-images-1.medium.com/max/3176/0*bq_d58tUTA54L-1v.png" alt="" /></p>
+<p><img src="https://cdn-images-1.medium.com/max/3176/0*bq_d58tUTA54L-1v.png" alt="tmux vertical split" /></p>
 
 <h2>Horizontal Screen Split</h2>
 
 <pre><code>Ctrl+B "
 </code></pre>
 
-<p><img src="https://cdn-images-1.medium.com/max/3176/0*0vmRK4OB6FIUNT2M.png" alt="" /></p>
+<p><img src="https://cdn-images-1.medium.com/max/3176/0*0vmRK4OB6FIUNT2M.png" alt="tmux horizontal split" /></p>
 
 <h2>Switching Between Screens</h2>
 
@@ -163,11 +184,15 @@
 
     </main>
     <footer>
-      <span>&copy; 2024 Mert Cobanov. All rights reserved.</span>
+      <span>&copy; 2026 Mert Cobanov. All rights reserved.</span>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
     <script src="/main.js"></script>
   </body>
 </html>

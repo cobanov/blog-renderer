@@ -39,25 +39,33 @@ _Source: [https://github.com/tmux/tmux/wiki/Installing](https://github.com/tmux/
 
 To start using tmux, type tmux in your terminal. This command starts a tmux server and creates a default session (number 0).
 
-    tmux
+```bash
+tmux
+```
 
-![](https://cdn-images-1.medium.com/max/3176/0*nPkiznvGZTispU-K.png)
+![tmux default session](https://cdn-images-1.medium.com/max/3176/0*nPkiznvGZTispU-K.png)
 
 To detach from a tmux session, press Ctrl+B followed by D (detach). tmux uses a series of key bindings (keyboard shortcuts) that are triggered by pressing a "prefix" combination. By default, the prefix is Ctrl+B. Then, press D (detach) to detach from the current session.
 
-    ~ tmux ls # 0: 1 windows (created Thu Nov 30 20:16:45 2023)
+```bash
+~ tmux ls # 0: 1 windows (created Thu Nov 30 20:16:45 2023)
+```
 
-![](https://cdn-images-1.medium.com/max/3176/0*jNjXSqK4_R2JJ7uR.png)
+![tmux session list](https://cdn-images-1.medium.com/max/3176/0*jNjXSqK4_R2JJ7uR.png)
 
 You can rename an already opened session using the following command:
 
-    # tmux rename -t <target_session> <new_name>
-    ~ tmux rename -t 0 cobanov
+```bash
+# tmux rename -t <target_session> <new_name>
+~ tmux rename -t 0 cobanov
+```
 
 At this point, you can disconnect your SSH connection and the command will continue running. You can reconnect to the existing tmux session whenever you want and continue where you left off:
 
-    # tmux a -t <session_name>
-    ~ tmux attach -t cobanov
+```bash
+# tmux a -t <session_name>
+~ tmux attach -t cobanov
+```
 
 Voilà! Everything continues exactly where it was.
 
@@ -69,19 +77,25 @@ Unlike a standard desktop environment, these panes are tiled across the entire t
 
 ## Vertical Screen Split
 
-    Ctrl+B %
+```
+Ctrl+B %
+```
 
-![](https://cdn-images-1.medium.com/max/3176/0*bq_d58tUTA54L-1v.png)
+![tmux vertical split](https://cdn-images-1.medium.com/max/3176/0*bq_d58tUTA54L-1v.png)
 
 ## Horizontal Screen Split
 
-    Ctrl+B "
+```
+Ctrl+B "
+```
 
-![](https://cdn-images-1.medium.com/max/3176/0*0vmRK4OB6FIUNT2M.png)
+![tmux horizontal split](https://cdn-images-1.medium.com/max/3176/0*0vmRK4OB6FIUNT2M.png)
 
 ## Switching Between Screens
 
-    Ctrl+B [arrow key]
+```
+Ctrl+B [arrow key]
+```
 
 To see all the shortcut keys in tmux, simply use the bind-key ? command, which in my case would be Ctrl+B ?.
 

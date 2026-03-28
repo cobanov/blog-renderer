@@ -1,3 +1,5 @@
+2025-06-10
+
 # How I Connected My Tesla to Claude
 
 _Ever wondered what happens when you combine Tesla's API, PostgreSQL, and Claude? You get a conversational car assistant that can tell you everything from battery levels to efficiency patterns. Here's how I built it._
