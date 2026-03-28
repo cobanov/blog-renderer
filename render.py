@@ -111,7 +111,9 @@ def generate_pages(src_dir: Path, out_dir: Path):
     pages = []
     section_name = out_dir.name
 
-    for md_path in src_dir.glob("*.md"):
+    for md_path in sorted(src_dir.glob("*.md")):
+        if src_dir == PAGES_SRC and md_path.name == "home.md":
+            continue
         slug = md_path.stem
         text = md_path.read_text(encoding="utf-8")
 
@@ -156,7 +158,7 @@ def build_sub_index(pages, index_path: Path, section_title: str):
 
     for p in pages:
         items.append(
-            f'<li><a href="{p["basename"]}">{p["title"]}</a> <small>({p["date"]})</small></li>'
+            f'<li><a href="{p["basename"]}">{p["title"]}</a> <small>{p["date"]}</small></li>'
         )
 
     items.append("</ul>")
@@ -173,13 +175,12 @@ def build_index(blog):
 
     segments = [
         '<div class="intro">', home_body, '</div>',
-        '<hr>',
-        '<h2 class="section-label">Writing</h2>',
+        '<p class="section-label">Writing</p>',
         '<ul class="post-list">',
     ]
     for p in blog:
         segments.append(
-            f'<li><a href="{p["filename"]}">{p["title"]}</a> <small>({p["date"]})</small></li>'
+            f'<li><a href="{p["filename"]}">{p["title"]}</a> <small>{p["date"]}</small></li>'
         )
     segments.append("</ul>")
 
