@@ -54,64 +54,71 @@ def ensure_dirs():
 def copy_assets():
     """Copy static assets to the output folder."""
     for asset in ASSETS:
+        if not asset.exists():
+            logger.warning(f"Asset not found, skipping: {asset}")
+            continue
         shutil.copy(asset, OUT_DIR / asset.name)
     logger.info(f"Assets copied to {OUT_DIR}")
 
 
-def populate_template(content: str, title: str, date: str, description: str = "") -> str:
+def populate_template(content: str, title: str, date: str, description: str = "", year: str = "") -> str:
     """Inject content, title, date, description, and year into the HTML template."""
+    # Replace metadata tokens first, content last — prevents post content from
+    # accidentally containing {{ title }} / {{ year }} and getting substituted.
     return (
-        _raw_template.replace("{{ content }}", content)
-        .replace("{{ title }}", title)
+        _raw_template.replace("{{ title }}", title)
         .replace("{{ date }}", date)
         .replace("{{ description }}", description)
-        .replace("{{ year }}", str(datetime.now().year))
+        .replace("{{ year }}", year)
+        .replace("{{ content }}", content)
     )
 
 
 def extract_date_from_content(text: str, fallback_path: Path) -> tuple[str, str]:
     """Extract date from markdown content in YYYY-MM-DD format and return cleaned content."""
     lines = text.splitlines()
-
-    date_pattern = r"^\s*(\d{4}-\d{2}-\d{2})\s*$"
+    date_pattern = re.compile(r"^(\d{4}-\d{2}-\d{2})$")
 
     for i, line in enumerate(lines[:5]):
-        match = re.match(date_pattern, line.strip())
+        match = date_pattern.match(line.strip())
         if match:
             date_str = match.group(1)
             try:
                 datetime.strptime(date_str, "%Y-%m-%d")
-                cleaned_lines = lines[:i] + lines[i + 1 :]
-                cleaned_content = "\n".join(cleaned_lines).strip()
-                return date_str, cleaned_content
+                cleaned_lines = lines[:i] + lines[i + 1:]
+                return date_str, "\n".join(cleaned_lines).strip()
             except ValueError:
                 continue
 
-    fallback_date = datetime.fromtimestamp(fallback_path.stat().st_mtime).strftime(
-        "%Y-%m-%d"
-    )
+    fallback_date = datetime.fromtimestamp(fallback_path.stat().st_mtime).strftime("%Y-%m-%d")
     return fallback_date, text
 
 
 def extract_description(text: str, max_length: int = 160) -> str:
     """Extract a plain-text description from markdown content for meta tags."""
+    skip_prefixes = ("#", "!", ">", "---", "- ", "* ", "```")
     for line in text.splitlines():
         stripped = line.strip()
-        if not stripped or stripped.startswith("#") or stripped.startswith("!"):
+        if not stripped or any(stripped.startswith(p) for p in skip_prefixes):
             continue
-        clean = re.sub(r"[*_`\[\]()]", "", stripped)
+        # Strip inline markdown: links [text](url) → text, bold/italic, code
+        clean = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", stripped)  # [text](url) → text
+        clean = re.sub(r"[*_`]", "", clean)
+        clean = clean.strip()
+        if not clean:
+            continue
         if len(clean) > max_length:
-            return clean[: max_length - 3] + "..."
+            return clean[:max_length - 3] + "..."
         return clean
     return ""
 
 
-def generate_pages(src_dir: Path, out_dir: Path):
+def generate_pages(src_dir: Path, out_dir: Path, year: str):
     """Build HTML pages from markdown in src_dir, returning metadata."""
     pages = []
     section_name = out_dir.name
 
-    for md_path in sorted(src_dir.glob("*.md")):
+    for md_path in src_dir.glob("*.md"):
         if src_dir == PAGES_SRC and md_path.name == "home.md":
             continue
         slug = md_path.stem
@@ -122,15 +129,15 @@ def generate_pages(src_dir: Path, out_dir: Path):
         title = None
         for line in cleaned_text.splitlines():
             stripped = line.strip()
-            if stripped.startswith("#"):
-                title = stripped.lstrip("#").strip()
+            if stripped.startswith("# "):
+                title = stripped[2:].strip()
                 break
         if not title:
             title = slug.replace("-", " ").replace("_", " ").title()
 
         description = extract_description(cleaned_text)
         body = markdown2.markdown(cleaned_text, extras=MD_EXTRAS)
-        html = populate_template(body, title, date_str, description)
+        html = populate_template(body, title, date_str, description, year)
 
         out_file = out_dir / f"{slug}.html"
         out_file.write_text(html, encoding="utf-8")
@@ -152,9 +159,10 @@ def generate_pages(src_dir: Path, out_dir: Path):
     return sorted(pages, key=lambda p: p["date"], reverse=True)
 
 
-def build_sub_index(pages, index_path: Path, section_title: str):
+def build_sub_index(pages, index_path: Path, section_title: str, year: str):
     """Generate a sub-index in its folder, linking by basename."""
-    items = [f"<h1>{section_title.title()}</h1>", '<ul class="post-list">']
+    title = section_title.replace("-", " ").replace("_", " ").title()
+    items = [f"<h1>{title}</h1>", '<ul class="post-list">']
 
     for p in pages:
         items.append(
@@ -162,12 +170,12 @@ def build_sub_index(pages, index_path: Path, section_title: str):
         )
 
     items.append("</ul>")
-    html = populate_template("\n".join(items), section_title.title(), "")
+    html = populate_template("\n".join(items), title, "", year=year)
     index_path.write_text(html, encoding="utf-8")
     logger.info(f"Generated sub-index for {section_title}: {index_path}")
 
 
-def build_index(blog):
+def build_index(blog, year: str):
     """Compose the homepage with blog links."""
     home_md = PAGES_SRC / "home.md"
     home_text = home_md.read_text(encoding="utf-8") if home_md.exists() else ""
@@ -186,7 +194,7 @@ def build_index(blog):
 
     description = extract_description(home_text) if home_text else "Mert Cobanov's personal blog"
     INDEX_OUT.write_text(
-        populate_template("\n".join(segments), "Home", "", description),
+        populate_template("\n".join(segments), "Home", "", description, year),
         encoding="utf-8",
     )
     logger.info(f"Generated homepage: {INDEX_OUT}")
@@ -198,17 +206,17 @@ def build_site():
     clean_output()
     copy_assets()
 
-    build_section(PAGES_SRC, PAGES_OUT, None, "pages")
-    blog = build_section(BLOG_SRC, BLOG_OUT, BLOG_INDEX_OUT, cfg_data["blog_dir"])
+    year = str(datetime.now().year)
+    build_section(PAGES_SRC, PAGES_OUT, None, "pages", year)
+    blog = build_section(BLOG_SRC, BLOG_OUT, BLOG_INDEX_OUT, cfg_data["blog_dir"], year)
+    build_index(blog, year)
 
-    build_index(blog)
 
-
-def build_section(src: Path, out: Path, index: Path, name: str):
+def build_section(src: Path, out: Path, index: Path, name: str, year: str):
     """Generalized builder for pages or blog sections."""
-    pages = generate_pages(src, out)
+    pages = generate_pages(src, out, year)
     if index:
-        build_sub_index(pages, index, name)
+        build_sub_index(pages, index, name, year)
     return pages
 
 
