@@ -170,167 +170,155 @@
 
 <p>Finally, let&#8217;s bring all the information together. Car name, battery percentage, remaining range, total mileage, outside temperature, whether A/C is on or off, GPS coordinates, nearest address, and when this information was last updated. Essentially, let&#8217;s create a summary for each car in a single line like &#8220;Car X is currently at this address, battery is at X%, has X km range, outside temperature is X degrees.&#8221; Let&#8217;s prepare a useful report for the car tracking system.</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">car_name</span><span class="p">,</span>
-<span class="w">       </span><span class="n">p</span><span class="p">.</span><span class="n">battery_level</span><span class="p">,</span>
-<span class="w">       </span><span class="n">p</span><span class="p">.</span><span class="n">rated_battery_range_km</span><span class="p">,</span>
-<span class="w">       </span><span class="n">p</span><span class="p">.</span><span class="n">odometer</span><span class="p">,</span>
-<span class="w">       </span><span class="n">p</span><span class="p">.</span><span class="n">outside_temp</span><span class="p">,</span>
-<span class="w">       </span><span class="n">p</span><span class="p">.</span><span class="n">is_climate_on</span><span class="p">,</span>
-<span class="w">       </span><span class="n">p</span><span class="p">.</span><span class="n">latitude</span><span class="p">,</span>
-<span class="w">       </span><span class="n">p</span><span class="p">.</span><span class="n">longitude</span><span class="p">,</span>
-<span class="w">       </span><span class="n">a</span><span class="p">.</span><span class="n">display_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">LOCATION</span><span class="p">,</span>
-<span class="w">       </span><span class="n">a</span><span class="p">.</span><span class="n">city</span><span class="p">,</span>
-<span class="w">       </span><span class="n">a</span><span class="p">.</span><span class="k">state</span><span class="p">,</span>
-<span class="w">       </span><span class="n">p</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">last_update</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">positions</span><span class="w"> </span><span class="n">p</span>
-<span class="k">JOIN</span><span class="w"> </span><span class="n">cars</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">car_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id</span>
-<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="k">LATERAL</span>
-<span class="w">  </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
-<span class="w">   </span><span class="k">FROM</span><span class="w"> </span><span class="n">addresses</span><span class="w"> </span><span class="n">a</span>
-<span class="w">   </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="p">((</span><span class="n">p</span><span class="p">.</span><span class="n">latitude</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">latitude</span><span class="p">)</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">longitude</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">longitude</span><span class="p">)</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
-<span class="w">   </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">TRUE</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="nb">date</span><span class="p">)</span>
-<span class="w">     </span><span class="k">FROM</span><span class="w"> </span><span class="n">positions</span><span class="w"> </span><span class="n">p2</span>
-<span class="w">     </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">car_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">car_id</span><span class="p">);</span>
+<pre><code class="sql language-sql">SELECT c.name AS car_name,
+       p.battery_level,
+       p.rated_battery_range_km,
+       p.odometer,
+       p.outside_temp,
+       p.is_climate_on,
+       p.latitude,
+       p.longitude,
+       a.display_name AS LOCATION,
+       a.city,
+       a.state,
+       p.date AS last_update
+FROM positions p
+JOIN cars c ON p.car_id = c.id
+LEFT JOIN LATERAL
+  (SELECT *
+   FROM addresses a
+   ORDER BY ((p.latitude - a.latitude) ^ 2 + (p.longitude - a.longitude) ^ 2)
+   LIMIT 1) a ON TRUE
+WHERE p.date =
+    (SELECT MAX(date)
+     FROM positions p2
+     WHERE p2.car_id = p.car_id);
 </code></pre>
-</div>
 
 <p>The output will look like this:</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;car_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Cobanov&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;battery_level&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">79</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;rated_battery_range_km&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">309.53</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;odometer&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">6605.009314</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;outside_temp&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">23.5</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;is_climate_on&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;latitude&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">40.761497</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;longitude&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">29.981669</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;## my address ##&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;city&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Kocaeli&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;state&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Kocaeli&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;last_update&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-06-08T19:00:59.925000&quot;</span>
-<span class="p">}</span>
+<pre><code class="json language-json">{
+  "car_name": "Cobanov",
+  "battery_level": 79,
+  "rated_battery_range_km": 309.53,
+  "odometer": 6605.009314,
+  "outside_temp": 23.5,
+  "is_climate_on": false,
+  "latitude": 40.761497,
+  "longitude": 29.981669,
+  "location": "## my address ##",
+  "city": "Kocaeli",
+  "state": "Kocaeli",
+  "last_update": "2025-06-08T19:00:59.925000"
+}
 </code></pre>
-</div>
 
 <p><img src="https://github.com/cobanov/blog-renderer/blob/main/assets/current_status_claude.png?raw=true" alt="current-status" /></p>
 
 <p>No need to explain each one like the previous example. If I want to calculate average efficiency by temperature ranges, I write a query like this:</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">car_name</span><span class="p">,</span>
-<span class="w">       </span><span class="k">CASE</span>
-<span class="w">           </span><span class="k">WHEN</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">outside_temp_avg</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;Below 0°C&#39;</span>
-<span class="w">           </span><span class="k">WHEN</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">outside_temp_avg</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;0-10°C&#39;</span>
-<span class="w">           </span><span class="k">WHEN</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">outside_temp_avg</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;10-20°C&#39;</span>
-<span class="w">           </span><span class="k">WHEN</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">outside_temp_avg</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;20-30°C&#39;</span>
-<span class="w">           </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">&#39;Above 30°C&#39;</span>
-<span class="w">       </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">temp_range</span><span class="p">,</span>
-<span class="w">       </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">trip_count</span><span class="p">,</span>
-<span class="w">       </span><span class="k">AVG</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">distance</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">avg_distance_km</span><span class="p">,</span>
-<span class="w">       </span><span class="k">AVG</span><span class="p">((</span><span class="n">d</span><span class="p">.</span><span class="n">start_rated_range_km</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">end_rated_range_km</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="k">NULLIF</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">distance</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">avg_consumption_pct</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">drives</span><span class="w"> </span><span class="n">d</span>
-<span class="k">JOIN</span><span class="w"> </span><span class="n">cars</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">car_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">distance</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">start_rated_range_km</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">end_rated_range_km</span>
-<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">outside_temp_avg</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
-<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
-<span class="w">         </span><span class="k">CASE</span>
-<span class="w">             </span><span class="k">WHEN</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">outside_temp_avg</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;Below 0°C&#39;</span>
-<span class="w">             </span><span class="k">WHEN</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">outside_temp_avg</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;0-10°C&#39;</span>
-<span class="w">             </span><span class="k">WHEN</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">outside_temp_avg</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;10-20°C&#39;</span>
-<span class="w">             </span><span class="k">WHEN</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">outside_temp_avg</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;20-30°C&#39;</span>
-<span class="w">             </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">&#39;Above 30°C&#39;</span>
-<span class="w">         </span><span class="k">END</span>
-<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
-<span class="w">         </span><span class="n">avg_consumption_pct</span><span class="p">;</span>
+<pre><code class="sql language-sql">SELECT c.name AS car_name,
+       CASE
+           WHEN d.outside_temp_avg &lt; 0 THEN 'Below 0°C'
+           WHEN d.outside_temp_avg BETWEEN 0 AND 10 THEN '0-10°C'
+           WHEN d.outside_temp_avg BETWEEN 10 AND 20 THEN '10-20°C'
+           WHEN d.outside_temp_avg BETWEEN 20 AND 30 THEN '20-30°C'
+           ELSE 'Above 30°C'
+       END AS temp_range,
+       COUNT(*) AS trip_count,
+       AVG(d.distance) AS avg_distance_km,
+       AVG((d.start_rated_range_km - d.end_rated_range_km) / NULLIF(d.distance, 0) * 100) AS avg_consumption_pct
+FROM drives d
+JOIN cars c ON d.car_id = c.id
+WHERE d.distance &gt; 0
+  AND d.start_rated_range_km &gt; d.end_rated_range_km
+  AND d.outside_temp_avg IS NOT NULL
+GROUP BY c.name,
+         CASE
+             WHEN d.outside_temp_avg &lt; 0 THEN 'Below 0°C'
+             WHEN d.outside_temp_avg BETWEEN 0 AND 10 THEN '0-10°C'
+             WHEN d.outside_temp_avg BETWEEN 10 AND 20 THEN '10-20°C'
+             WHEN d.outside_temp_avg BETWEEN 20 AND 30 THEN '20-30°C'
+             ELSE 'Above 30°C'
+         END
+ORDER BY c.name,
+         avg_consumption_pct;
 </code></pre>
-</div>
 
-<div class="codehilite">
-<pre><span></span><code><span class="p">[</span>
-<span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;car_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Cobanov&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;temp_range&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10-20°C&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;trip_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;avg_distance_km&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">6.44</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;avg_consumption_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">128.75</span>
-<span class="w">  </span><span class="p">},</span>
-<span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;car_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Cobanov&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;temp_range&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;20-30°C&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;trip_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">78</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;avg_distance_km&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.74</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;avg_consumption_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">154.45</span>
-<span class="w">  </span><span class="p">},</span>
-<span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;car_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Cobanov&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;temp_range&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Above 30°C&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;trip_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;avg_distance_km&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">3.66</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;avg_consumption_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">298.66</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">]</span>
+<pre><code class="json language-json">[
+  {
+    "car_name": "Cobanov",
+    "temp_range": "10-20°C",
+    "trip_count": 20,
+    "avg_distance_km": 6.44,
+    "avg_consumption_pct": 128.75
+  },
+  {
+    "car_name": "Cobanov",
+    "temp_range": "20-30°C",
+    "trip_count": 78,
+    "avg_distance_km": 5.74,
+    "avg_consumption_pct": 154.45
+  },
+  {
+    "car_name": "Cobanov",
+    "temp_range": "Above 30°C",
+    "trip_count": 14,
+    "avg_distance_km": 3.66,
+    "avg_consumption_pct": 298.66
+  }
+]
 </code></pre>
-</div>
 
 <p>And yes, this simple 30-line code snippet in our MCP server – of course, I oversimplified everything in the snippet below, so check out the <a href="https://github.com/cobanov/teslamate-mcp">project</a>, but generally it really is this simple. Write your SQL queries according to your needs, add your functions as needed, and everything becomes quite straightforward.</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">psycopg</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">psycopg.rows</span><span class="w"> </span><span class="kn">import</span> <span class="n">dict_row</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mcp.server.fastmcp</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastMCP</span>
+<pre><code class="python language-python">import psycopg
+from psycopg.rows import dict_row
+from mcp.server.fastmcp import FastMCP
 
-<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;teslamate&quot;</span><span class="p">)</span>
-<span class="n">con_str</span> <span class="o">=</span> <span class="s2">&quot;postgresql://username:password@hostname:port/teslamate&quot;</span>
+mcp = FastMCP("teslamate")
+con_str = "postgresql://username:password@hostname:port/teslamate"
 
 
-<span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">()</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_basic_car_information</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get the basic car information for each car.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">psycopg</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">con_str</span><span class="p">,</span> <span class="n">row_factory</span><span class="o">=</span><span class="n">dict_row</span><span class="p">)</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span> <span class="k">as</span> <span class="n">cur</span><span class="p">:</span>
-            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">                SELECT c.name,</span>
-<span class="sd">                       c.model,</span>
-<span class="sd">                       c.trim_badging,</span>
-<span class="sd">                       c.exterior_color,</span>
-<span class="sd">                       c.marketing_name,</span>
-<span class="sd">                       cs.enabled,</span>
-<span class="sd">                       cs.free_supercharging</span>
-<span class="sd">                FROM cars c</span>
-<span class="sd">                LEFT JOIN car_settings cs ON c.settings_id = cs.id;</span>
-<span class="sd">                &quot;&quot;&quot;</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+@mcp.tool()
+def get_basic_car_information():
+    """
+    Get the basic car information for each car.
+    """
+    with psycopg.connect(con_str, row_factory=dict_row) as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT c.name,
+                       c.model,
+                       c.trim_badging,
+                       c.exterior_color,
+                       c.marketing_name,
+                       cs.enabled,
+                       cs.free_supercharging
+                FROM cars c
+                LEFT JOIN car_settings cs ON c.settings_id = cs.id;
+                """
+            )
+            return cur.fetchall()
 </code></pre>
-</div>
 
 <p>Finally, you&#8217;ll add this to the config file in Claude or whatever MCP host you&#8217;re using, and voilà – now you can talk to your desired database or, in our case, your Tesla!</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;teslamate&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uv&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">        </span><span class="s2">&quot;--directory&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="s2">&quot;/Users/cobanov-air/Developer/teslamate-mcp&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="s2">&quot;run&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="s2">&quot;main.py&quot;</span>
-<span class="w">      </span><span class="p">]</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
+<pre><code class="json language-json">{
+  "mcpServers": {
+    "teslamate": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/Users/cobanov-air/Developer/teslamate-mcp",
+        "run",
+        "main.py"
+      ]
+    }
+  }
+}
 </code></pre>
-</div>
 
 <p>The cool thing is that if you make your prompts more complex, Claude starts making multiple tool calls and comparing the data it gets.</p>
 

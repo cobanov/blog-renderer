@@ -16,6 +16,6 @@ assets:
 
 markdown_extras:
   - fenced-code-blocks
+  - highlightjs-lang
   - tables
-  - highlight
   - smarty-pants

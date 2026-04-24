@@ -197,50 +197,42 @@
 
 <p>Let&#8217;s make the necessary imports to build a simple <a href="https://scikit-learn.org/stable/index.html">Scikit-Learn</a> model using the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set">Iris dataset</a> (the national dataset of machine learning experts) and the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html">Random Forest Classifier</a> (the indispensable model of basic machine learning examples).</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_iris</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<pre><code class="python language-python">import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 </code></pre>
-</div>
 
 <p>Let&#8217;s instantiate the model and quickly fit it. If you&#8217;re already here to learn ONNX, I assume you won&#8217;t find it wrong that I expect you to understand these basic parts quickly.</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="n">iris</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">()</span>
+<pre><code class="python language-python">iris = load_iris()
 
-<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+X, y = iris.data, iris.target
+X = X.astype(np.float32)
+X_train, X_test, y_train, y_test = train_test_split(X, y)
 
-<span class="n">clr</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">()</span>
-<span class="n">clr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+clr = RandomForestClassifier()
+clr.fit(X_train, y_train)
 </code></pre>
-</div>
 
 <p>This code converts a machine learning model trained with Scikit-Learn to ONNX format and saves this converted model to a file called &#8220;rf_iris.onnx&#8221;. The ONNX format will enable the model to be usable across different platforms and devices.</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">skl2onnx</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_onnx</span>
+<pre><code class="python language-python">from skl2onnx import to_onnx
 
-<span class="n">onx</span> <span class="o">=</span> <span class="n">to_onnx</span><span class="p">(</span><span class="n">clr</span><span class="p">,</span> <span class="n">X</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;rf_iris.onnx&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">onx</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">())</span>
+onx = to_onnx(clr, X[:1])
+with open("rf_iris.onnx", "wb") as f:
+    f.write(onx.SerializeToString())
 </code></pre>
-</div>
 
 <p>Let&#8217;s load a machine learning model in ONNX format, use this model to make predictions on data, and obtain results.</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">onnxruntime</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rt</span>
+<pre><code class="python language-python">import onnxruntime as rt
 
-<span class="n">sess</span> <span class="o">=</span> <span class="n">rt</span><span class="o">.</span><span class="n">InferenceSession</span><span class="p">(</span><span class="s2">&quot;rf_iris.onnx&quot;</span><span class="p">,</span> <span class="n">providers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CPUExecutionProvider&quot;</span><span class="p">])</span>
-<span class="n">input_name</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">get_inputs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
-<span class="n">label_name</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">get_outputs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
-<span class="n">pred_onx</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">label_name</span><span class="p">],</span> <span class="p">{</span><span class="n">input_name</span><span class="p">:</span> <span class="n">X_test</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)})[</span><span class="mi">0</span><span class="p">]</span>
+sess = rt.InferenceSession("rf_iris.onnx", providers=["CPUExecutionProvider"])
+input_name = sess.get_inputs()[0].name
+label_name = sess.get_outputs()[0].name
+pred_onx = sess.run([label_name], {input_name: X_test.astype(np.float32)})[0]
 </code></pre>
-</div>
 
 <h3>Example 2: TensorFlow &amp; ONNX</h3>
 
@@ -248,20 +240,18 @@
 
 <p>Now, if you&#8217;re wondering why we should convert to ONNX when the TensorFlow model already works, and why we&#8217;d need this, as I mentioned above, we do this because we want to make it framework or device agnostic. Also, as I&#8217;ll mention in the next blog post, you&#8217;ll use this when working with platforms like <a href="https://azure.microsoft.com/">Azure</a> or AWS, or if you want to build a mobile application.</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">tf2onnx</span>
+<pre><code class="python language-python">import tensorflow as tf
+import tf2onnx
 
-<span class="n">tf_model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="s1">&#39;tf_model.h5&#39;</span><span class="p">)</span>
-<span class="n">onnx_model</span> <span class="o">=</span> <span class="n">tf2onnx</span><span class="o">.</span><span class="n">convert</span><span class="o">.</span><span class="n">from_keras</span><span class="p">(</span><span class="n">tf_model</span><span class="p">)</span>
+tf_model = tf.keras.models.load_model('tf_model.h5')
+onnx_model = tf2onnx.convert.from_keras(tf_model)
 
-<span class="n">onnx_model_path</span> <span class="o">=</span> <span class="s1">&#39;converted_model.onnx&#39;</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">onnx_model_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">onnx_model</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">())</span>
+onnx_model_path = 'converted_model.onnx'
+with open(onnx_model_path, 'wb') as f:
+    f.write(onnx_model.SerializeToString())
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model converted to ONNX and saved as:&quot;</span><span class="p">,</span> <span class="n">onnx_model_path</span><span class="p">)</span>
+print("Model converted to ONNX and saved as:", onnx_model_path)
 </code></pre>
-</div>
 
 <h2>More Technical Details</h2>
 
@@ -282,54 +272,52 @@
 
 <p><a href="https://github.com/onnx/models">ONNX Model Zoo</a> is a platform where volunteer developers collect various pre-trained models in ONNX format. Alongside these models, they also add Jupyter notebook examples for model training and inference with the trained models. References to the datasets used in training and original papers describing the model architecture are also included. This way, we can quickly grab and use these models without reinventing the wheel. Git LFS (Large File Storage) is used to store these models.</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">onnx</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">onnx_tf.backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">prepare</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<pre><code class="python language-python">import onnx
+from onnx_tf.backend import prepare
+import numpy as np
+from PIL import Image
+import json
 
-<span class="c1"># Load the ONNX model</span>
+# Load the ONNX model
 
-<span class="c1"># Use local model</span>
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;./vgg19-7.onnx&#39;</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">onnx</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+# Use local model
+model_path = './vgg19-7.onnx'
+model = onnx.load(model_path)
 
-<span class="c1">## Download from hub</span>
-<span class="c1"># model_path = &#39;vgg 19&#39;</span>
-<span class="c1"># model = onnx.hub.load(model_path)</span>
+## Download from hub
+# model_path = 'vgg 19'
+# model = onnx.hub.load(model_path)
 
-<span class="c1"># Prepare the ONNX model for TensorFlow</span>
-<span class="n">tf_model</span> <span class="o">=</span> <span class="n">prepare</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+# Prepare the ONNX model for TensorFlow
+tf_model = prepare(model)
 
-<span class="c1"># Display input and output nodes of the model</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Input nodes:&quot;</span><span class="p">,</span> <span class="n">tf_model</span><span class="o">.</span><span class="n">inputs</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output nodes:&quot;</span><span class="p">,</span> <span class="n">tf_model</span><span class="o">.</span><span class="n">outputs</span><span class="p">)</span>
+# Display input and output nodes of the model
+print("Input nodes:", tf_model.inputs)
+print("Output nodes:", tf_model.outputs)
 
-<span class="c1"># Load class labels from a JSON file</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;labels.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-    <span class="n">label_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+# Load class labels from a JSON file
+with open('labels.json', 'r') as json_file:
+    label_data = json.load(json_file)
 
-<span class="c1"># Load and preprocess the input image</span>
-<span class="n">input_image_path</span> <span class="o">=</span> <span class="s1">&#39;frog.jpg&#39;</span>
-<span class="n">input_image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_image_path</span><span class="p">)</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">))</span>
-<span class="n">input_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">input_image</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
-<span class="n">input_image</span> <span class="o">=</span> <span class="n">input_image</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="n">input_image</span> <span class="o">=</span> <span class="n">input_image</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>  <span class="c1"># Transform to Input Tensor</span>
+# Load and preprocess the input image
+input_image_path = 'frog.jpg'
+input_image = Image.open(input_image_path).resize((224, 224))
+input_image = np.asarray(input_image, dtype=np.float32)[np.newaxis, np.newaxis, :, :]
+input_image = input_image.transpose(0, 1, 4, 2, 3)
+input_image = input_image.reshape(1, 3, 224, 224)  # Transform to Input Tensor
 
-<span class="c1"># Run inference on the input image</span>
-<span class="n">output</span> <span class="o">=</span> <span class="n">tf_model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_image</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+# Run inference on the input image
+output = tf_model.run(input_image)[0][0]
 
-<span class="c1"># Find the top 5 class indices</span>
-<span class="n">top_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argpartition</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">)[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]</span>
+# Find the top 5 class indices
+top_indices = np.argpartition(output, -5)[-5:]
 
-<span class="c1"># Display the top 5 class labels and their scores</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">top_indices</span><span class="p">:</span>
-    <span class="n">class_label</span> <span class="o">=</span> <span class="n">label_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">)</span>
-    <span class="n">class_score</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Class: </span><span class="si">{</span><span class="n">class_label</span><span class="si">}</span><span class="s2">, Score: </span><span class="si">{</span><span class="n">class_score</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+# Display the top 5 class labels and their scores
+for i in top_indices:
+    class_label = label_data.get(str(i), "Unknown")
+    class_score = output[i]
+    print(f"Class: {class_label}, Score: {class_score:.4f}")
 </code></pre>
-</div>
 
 <pre><code>Class: American chameleon, anole, Anolis carolinensis, Score: 85.1076
 Class: green lizard, Lacerta viridis, Score: 92.0642
