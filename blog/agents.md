@@ -1,3 +1,10 @@
+---
+title: "From latent spaces to JWTs: how agents taught me backend"
+date: 2026-03-28
+description: "I wrote code every day for years and somehow felt like I wasn't really writing code. Let me explain."
+draft: false
+---
+
 # From latent spaces to JWTs: how agents taught me backend
 
 ![corals](https://raw.githubusercontent.com/cobanov/blog-renderer/refs/heads/main/assets/corals.jpeg)
