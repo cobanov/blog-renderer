@@ -1,0 +1,21 @@
+# blog.cobanov.dev is retired. Everything here also lives on cobanov.dev, which
+# made the two hosts duplicates of each other and split their search ranking.
+# These are 301s rather than a deletion so the links people already have — and
+# the ranking those links earned — land on the surviving copy.
+#
+# Both spellings of a post URL were reachable here, so both are mapped.
+
+/blog/agents.html              https://cobanov.dev/blog/agents/              301
+/blog/genai_revolution.html    https://cobanov.dev/blog/genai_revolution/    301
+/blog/generativeart.html       https://cobanov.dev/blog/generativeart/       301
+/blog/onnx.html                https://cobanov.dev/blog/onnx/                301
+/blog/piracy.html              https://cobanov.dev/blog/piracy/              301
+/blog/teslamcp.html            https://cobanov.dev/blog/teslamcp/            301
+/blog/tmux.html                https://cobanov.dev/blog/tmux/                301
+/blog/visiontransformers.html  https://cobanov.dev/blog/visiontransformers/  301
+
+/blog/:slug                    https://cobanov.dev/blog/:slug/               301
+/blog                          https://cobanov.dev/blog                      301
+
+# Anything left over — the index, stray assets, old paths — goes to the blog.
+/*                             https://cobanov.dev/blog                      301
